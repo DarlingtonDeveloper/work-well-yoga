@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Work Well — compare 3 hero variants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { background: #f4efe4; }
+  .cmp-head {
+    max-width: 1240px; margin: 0 auto; padding: 48px 32px 16px;
+  }
+  .cmp-head .k { color: var(--teal); font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
+  .cmp-head h1 { font-family: var(--serif); font-weight: 300; font-size: 48px; margin: 10px 0 6px; letter-spacing: -.02em; }
+  .cmp-head p { color: var(--ink-2); max-width: 60ch; margin: 0; }
+  .cmp-actions { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .cmp-actions a { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--teal); padding: 8px 14px; border-radius: 999px; background: rgba(8,131,149,0.08); cursor: pointer; }
+  .cmp-actions a:hover { background: rgba(8,131,149,0.14); }
+  .variant-wrap {
+    max-width: 1240px; margin: 32px auto; background: #fff;
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.05);
+  }
+  .variant-tag {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px; background: var(--teal-ink); color: #fff;
+    font-family: var(--serif); font-style: italic; font-size: 20px;
+  }
+  .variant-tag .badge { font-family: var(--sans); font-style: normal; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; background: var(--sun); color: var(--teal-ink); padding: 4px 10px; border-radius: 999px; font-weight: 700; }
+  .variant-tag .num { font-family: var(--sans); font-style: normal; font-size: 12px; opacity: .6; letter-spacing: .14em; text-transform: uppercase; }
+  .variant-body { position: relative; }
+</style>
+</head>
+<body>
+<div class="cmp-head">
+  <div class="k">3 hero variants · side by side</div>
+  <h1>Pick a direction.</h1>
+  <p>Each variant uses the same copy, colour palette (teal + sun yellow), and typography (Fraunces + Inter) — only the composition changes.</p>
+  <div class="cmp-actions">
+    <a href="index.html">← Back to full prototype</a>
+    <a href="index.html">Open prototype · toggle Tweaks to switch live</a>
+  </div>
+</div>
+
+<div class="variant-wrap">
+  <div class="variant-tag"><span>i. <span style="font-style:normal; font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; margin-left: 10px;">Sun</span></span><span class="badge">Recommended</span></div>
+  <div class="variant-body" id="v-sun"></div>
+</div>
+
+<div class="variant-wrap">
+  <div class="variant-tag"><span>ii. <span style="font-style:normal; font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; margin-left: 10px;">Split</span></span><span class="num">02 of 03</span></div>
+  <div class="variant-body" id="v-split"></div>
+</div>
+
+<div class="variant-wrap">
+  <div class="variant-tag"><span>iii. <span style="font-style:normal; font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; margin-left: 10px;">Editorial</span></span><span class="num">03 of 03</span></div>
+  <div class="variant-body" id="v-editorial"></div>
+</div>
+
+<div style="max-width:1240px; margin: 32px auto 80px; padding: 0 32px; color: var(--ink-3); font-size: 13px;">
+  Toggle Tweaks in the main prototype to switch live, edit headlines, and slide the accent balance.
+</div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="components/icons.jsx"></script>
+<script type="text/babel" src="components/hero.jsx"></script>
+<script type="text/babel">
+  const heroProps = {
+    headline: "Find your pause.",
+    sub: "A yoga practice that meets you in the middle of your Tuesday — not at a retreat you'll never book.",
+    cta: "Download the app",
+    onCTA: () => { window.location.href = 'index.html'; }
+  };
+  ReactDOM.createRoot(document.getElementById('v-sun')).render(<HeroSun {...heroProps}/>);
+  ReactDOM.createRoot(document.getElementById('v-split')).render(<HeroSplit {...heroProps}/>);
+  ReactDOM.createRoot(document.getElementById('v-editorial')).render(<HeroEditorial {...heroProps}/>);
+</script>
+</body>
+</html>
