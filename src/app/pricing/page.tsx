@@ -4,49 +4,39 @@ import { useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 
-type Audience = "corporate" | "cowork";
-
 const corporatePlans = [
   {
     name: "Starter",
     tagline: "One class per month",
-    price: "From £50",
+    price: "From \u00a350",
+    priceNum: 50,
     per: "per month",
     seats: "Up to 15 participants",
-    blurb:
-      "One live class a month, delivered to your team wherever they are. Low commitment, zero faff. Perfect for trying us out or keeping a small team ticking over.",
+    blurb: "A single 60\u2011minute class a month. In\u2011office or Zoom. The quietest way to start.",
     features: [
       "1 live class per month",
-      "Up to 15 participants per class",
-      "Full app access for all participants",
-      "120-class on-demand library",
-      "Guided meditations & breathwork",
-      "Scheduling & booking handled for you",
-      "Vetted, insured teacher",
-      "Anonymous attendance — no HR data shared",
+      "Up to 15 participants",
+      "Choice of 6 class formats",
+      "In\u2011office or Zoom",
+      "App access for all attendees",
     ],
     cta: "Book Starter",
-    featured: false,
   },
   {
     name: "Quarterly",
     tagline: "Most chosen",
-    price: "From £100",
+    price: "From \u00a3100",
+    priceNum: 100,
     per: "per month",
     seats: "Up to 15 participants",
-    blurb:
-      "Weekly classes across a quarter — enough regularity to build a real practice. This is what most teams start with and stick with. Billed per quarter for simplicity.",
+    blurb: "Four classes a month, same teacher, a weekly rhythm that teams actually settle into.",
     features: [
-      "1 live class per week (4–5/mo)",
-      "Up to 15 participants per class",
-      "Full app access for all participants",
-      "120-class on-demand library",
-      "Guided meditations & breathwork",
-      "Scheduling & booking handled for you",
-      "Vetted, insured teacher",
-      "Anonymous attendance — no HR data shared",
-      "Quarterly wellbeing report for HR",
-      "Priority teacher matching",
+      "4 live classes per month",
+      "Up to 15 participants",
+      "Dedicated teacher",
+      "Rotating formats",
+      "App access, all employees",
+      "Quarterly review call",
     ],
     cta: "Book Quarterly",
     featured: true,
@@ -54,26 +44,20 @@ const corporatePlans = [
   {
     name: "Full team",
     tagline: "Up to 30 seats",
-    price: "From £300",
+    price: "From \u00a3300",
+    priceNum: 300,
     per: "per month",
     seats: "Up to 30 participants",
-    blurb:
-      "For larger teams or organisations that want more. Two classes a week, up to thirty seats, a dedicated teacher who learns your team. As close to an in-house programme as you get without the overhead.",
+    blurb: "Four classes a month, double the capacity. For teams wanting a deeper practice.",
     features: [
-      "2 live classes per week (8–10/mo)",
-      "Up to 30 participants per class",
-      "Full app access for all participants",
-      "120-class on-demand library",
-      "Guided meditations & breathwork",
-      "Scheduling & booking handled for you",
-      "Dedicated vetted, insured teacher",
-      "Anonymous attendance — no HR data shared",
-      "Monthly wellbeing report for HR",
-      "Priority teacher matching",
-      "Custom class themes on request",
+      "4 live classes per month",
+      "Up to 30 participants",
+      "Dedicated teacher",
+      "Priority scheduling",
+      "Bespoke themed series",
+      "App access, all employees",
     ],
     cta: "Book Full team",
-    featured: false,
   },
 ];
 
@@ -81,260 +65,229 @@ const coworkPlans = [
   {
     name: "Weekly class",
     tagline: "One class a week",
-    price: "£640",
+    price: "\u00a3640",
+    priceNum: 640,
     per: "per month",
     seats: "Free for your members",
-    blurb:
-      "One live yoga class a week, bookable by your members through the Work Well app. A tangible perk that brings people back to your space. No admin for you — just a recurring class on the calendar.",
+    blurb: "We run one 60\u2011minute class a week at your space. Your members book through our app \u2014 no cost to them, no admin for you.",
     features: [
-      "4–5 live classes per month",
-      "Up to 25 members per class",
-      "Free app access for all your members",
-      "120-class on-demand library included",
-      "Guided meditations & breathwork",
-      "Booking & scheduling fully managed",
-      "Vetted, insured teacher",
-      "Listed on the Work Well co-work map",
+      "One 60\u2011min class each week",
+      "We bring mats, props, teacher",
+      "Members book in two taps",
+      "Printed schedule for your lobby",
+      "Cancel with 30 days\u2019 notice",
     ],
     cta: "Book a call",
-    featured: false,
   },
   {
     name: "Full programme",
-    tagline: "Most co-works choose this",
-    price: "£1,480",
+    tagline: "Most co\u2011works choose this",
+    price: "\u00a31,480",
+    priceNum: 1480,
     per: "per month",
     seats: "Free for your members",
-    blurb:
-      "Three classes a week plus a monthly workshop — yoga, meditation, or breathwork. A proper wellness offering that sets your space apart. Members get everything in the app as part of their membership.",
+    blurb: "A proper weekly rhythm \u2014 morning yoga, lunchtime breath, Friday wind\u2011down. A genuine amenity your members feel.",
     features: [
-      "3 live classes per week (12–15/mo)",
-      "Monthly workshop (yoga, meditation, or breathwork)",
-      "Up to 25 members per class",
-      "Free app access for all your members",
-      "120-class on-demand library included",
-      "Guided meditations & breathwork",
-      "Booking & scheduling fully managed",
-      "Dedicated vetted, insured teacher",
-      "Listed on the Work Well co-work map",
-      "Co-branded welcome email for new members",
-      "Monthly attendance summary",
+      "2\u20113 classes per week",
+      "Mix of yoga, breath & sound",
+      "Co\u2011branded booking page",
+      "Quarterly themed pop\u2011up",
+      "Dedicated account manager",
     ],
     cta: "Book a call",
     featured: true,
   },
   {
-    name: "One-off",
+    name: "One\u2011off",
     tagline: "Single event",
-    price: "From £280",
+    price: "From \u00a3280",
+    priceNum: 280,
     per: "per class",
     seats: "Up to 25 members",
-    blurb:
-      "A single class for a special occasion — a new-member welcome, an end-of-quarter wind-down, a community morning. No commitment, no subscription. Just a great class.",
+    blurb: "A launch, a member evening, a Mental Health Week special. We\u2019ll run a single class \u2014 no subscription, no commitment.",
     features: [
-      "One live class",
-      "Up to 25 participants",
-      "Choice of yoga, meditation, or breathwork",
-      "Vetted, insured teacher",
-      "Booking & logistics handled",
-      "Optional: add a 30-min Q&A with the teacher",
+      "60 or 75\u2011minute class",
+      "Any format, any time",
+      "Everything included",
+      "Book as many as you like",
     ],
     cta: "Get a quote",
-    featured: false,
   },
 ];
 
-const includedItems = [
-  {
-    icon: "play",
-    title: "Full app library",
-    desc: "Every participant gets access to 120+ on-demand classes — vinyasa, yin, restorative, desk flows — plus guided meditations, breathwork, and sound sessions.",
-  },
-  {
-    icon: "clock",
-    title: "Live bookings",
-    desc: "Classes are added to the Work Well app timetable. Participants book their own seat in two taps. You never need to manage a sign-up sheet.",
-  },
-  {
-    icon: "anchor",
-    title: "Anonymous by default",
-    desc: "Attendance data is aggregated and never tied to named individuals. HR gets a headcount, not a list of who came to the Wednesday lunchtime session.",
-  },
-  {
-    icon: "spark",
-    title: "Vetted teachers",
-    desc: "Every teacher is Yoga Alliance accredited, DBS checked, and fully insured. We interview them, shadow their classes, and only list teachers we'd send our own families to.",
-  },
-];
-
-const faqs = [
-  {
-    q: "How does the live class work technically?",
-    a: "Classes run over a dedicated video link sent through the Work Well app. Participants join from their desk, home, or anywhere with a wi-fi connection. No extra software required — the link opens in any browser. We recommend at least a 2m × 2m clear space, but most desk flows work in a standard office chair.",
-  },
-  {
-    q: "What if our team can't all make the same time?",
-    a: "We schedule classes in collaboration with you — mornings, lunchtimes, or end-of-day. If you have a distributed or shift-based team, we can set up two sessions of the same class. All participants also have full access to the on-demand library, so anyone who misses the live class can catch a recorded one any time.",
-  },
-  {
-    q: "Do you offer in-person classes?",
-    a: "Not as a standard plan — our model is built around remote-first delivery. That said, if you're looking for an in-person session as a one-off event (for a team day or offsite, for instance), get in touch and we'll see what we can arrange.",
-  },
-  {
-    q: "Can we change our plan later?",
-    a: "Yes. Plans run on a rolling basis after any minimum term. You can upgrade, downgrade, or pause with 30 days' notice. We'd rather keep you on a plan that works than lock you into something that doesn't.",
-  },
-  {
-    q: "Is there a minimum contract length?",
-    a: "The Quarterly plan is billed per quarter — so three months minimum. The Starter and Full team plans roll monthly after an initial two-month period. One-off sessions have no ongoing commitment.",
-  },
-  {
-    q: "What do you mean by 'anonymous by default'?",
-    a: "We don't collect individual attendance records linked to employee names or IDs. The booking system knows a seat is taken — it doesn't know whose seat it is. Aggregated participation numbers (e.g. '11 people attended this month') are shared with the HR contact for reporting purposes only.",
-  },
-];
+async function handleSubscribe(planName: string, price: number) {
+  const res = await fetch("/api/checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      mode: "subscription",
+      planName,
+      items: [{ name: `Work Well Yoga — ${planName}`, price }],
+    }),
+  });
+  const { url } = await res.json();
+  if (url) window.location.href = url;
+}
 
 export default function PricingPage() {
-  const [audience, setAudience] = useState<Audience>("corporate");
+  const [audience, setAudience] = useState<"corporate" | "cowork">("corporate");
+  const plans = audience === "corporate" ? corporatePlans : coworkPlans;
 
   return (
     <>
-      {/* Hero + tabs */}
+      {/* Hero */}
       <section className="pricing-hero">
         <div className="pricing-hero-inner">
-          <div className="section-eyebrow">Pricing</div>
-          <h1 className="section-h2">
-            Straightforward plans.<br />
-            <em>No per-seat spreadsheets.</em>
-          </h1>
-          <p className="section-lede">
-            Pick a plan, book a teacher, and your team is doing yoga next week.
-            Every plan includes the full app — live classes, on-demand library, meditations, and breathwork.
-          </p>
+          <div className="eyebrow">Pricing</div>
 
-          {/* Tabs */}
-          <div className="pricing-tabs pricing-tabs-2">
+          <div className="pricing-tabs pricing-tabs-2" role="tablist">
             <button
+              role="tab"
+              aria-selected={audience === "corporate"}
               className={audience === "corporate" ? "active" : ""}
               onClick={() => setAudience("corporate")}
             >
               Employers
             </button>
             <button
+              role="tab"
+              aria-selected={audience === "cowork"}
               className={audience === "cowork" ? "active" : ""}
               onClick={() => setAudience("cowork")}
             >
-              Co-working spaces
+              Co&#x2011;working
             </button>
+            <div className="tabs-indicator-2" data-pos={audience}></div>
           </div>
         </div>
       </section>
 
-      {/* Plan cards */}
+      {/* Cards */}
       <section className="pricing-panel">
         <div className="pricing-cards">
-          {(audience === "corporate" ? corporatePlans : coworkPlans).map((plan) => (
-            <div
-              key={plan.name}
-              className={`pcard${plan.featured ? " pcard-featured" : ""}`}
-            >
-              {plan.featured && (
-                <div className="pcard-ribbon">Most chosen</div>
-              )}
+          {plans.map((p, i) => (
+            <div key={i} className={"pcard " + ((p as { featured?: boolean }).featured ? "pcard-featured" : "")}>
+              {(p as { featured?: boolean }).featured && <div className="pcard-ribbon">{p.tagline}</div>}
               <div className="pcard-head">
-                <div className="pcard-name">{plan.name}</div>
-                <div className="pcard-tag">{plan.tagline}</div>
-                <div className="pcard-price">
-                  {plan.price}
-                  <span className="pcard-per"> / {plan.per}</span>
-                </div>
-                <div className="pcard-seats">{plan.seats}</div>
+                <div className="pcard-name">{p.name}</div>
+                {!(p as { featured?: boolean }).featured && <div className="pcard-tag">{p.tagline}</div>}
               </div>
-              <p className="pcard-blurb">{plan.blurb}</p>
-              <hr className="pcard-divider" />
+              <div className="pcard-price">
+                <span className="v">{p.price}</span>
+                <span className="p">{p.per}</span>
+              </div>
+              <div className="pcard-seats">{p.seats}</div>
+              <p className="pcard-blurb">{p.blurb}</p>
+              <div className="pcard-divider" />
               <ul className="pcard-list">
-                {plan.features.map((f, i) => (
-                  <li key={i}>
-                    <Icon name="check" size={15} />
-                    {f}
+                {p.features.map((f, j) => (
+                  <li key={j}>
+                    <span className="tick"><Icon name="check" size={12} /></span> {f}
                   </li>
                 ))}
               </ul>
-              <Link
-                href="/contact"
-                className={`btn btn-lg${plan.featured ? " btn-sun" : " btn-outline"}`}
-              >
-                {plan.cta} <Icon name="arrow-right" size={14} />
-              </Link>
+              {audience === "corporate" && (p as { priceNum?: number }).priceNum ? (
+                <button
+                  className={"btn btn-lg " + ((p as { featured?: boolean }).featured ? "btn-sun" : "btn-ghost")}
+                  style={{ width: "100%", justifyContent: "center", marginTop: "auto" }}
+                  onClick={() => handleSubscribe(p.name, (p as { priceNum: number }).priceNum)}
+                >
+                  {p.cta} <Icon name="arrow-right" size={14} />
+                </button>
+              ) : (
+                <Link
+                  href="/contact"
+                  className={"btn btn-lg " + ((p as { featured?: boolean }).featured ? "btn-sun" : "btn-ghost")}
+                  style={{ width: "100%", justifyContent: "center", marginTop: "auto" }}
+                >
+                  {p.cta}
+                </Link>
+              )}
             </div>
           ))}
         </div>
+
+        {audience === "corporate" && (
+          <div className="corp-addon">
+            <div>
+              <div className="section-eyebrow" style={{ color: "var(--teal)" }}>One&#x2011;off</div>
+              <h3>A single event? <em>That works too.</em></h3>
+              <p>Team offsites, Mental Health Awareness Week, the all&#x2011;hands that needs a soft landing. One&#x2011;off classes start at <strong>&pound;280</strong>.</p>
+            </div>
+            <Link href="/contact" className="btn btn-sun btn-lg">Get a quote <Icon name="arrow-right" size={14} /></Link>
+          </div>
+        )}
       </section>
 
-      {/* Corp add-on: one-off events */}
-      {audience === "corporate" && (
-        <section className="corp-addon">
-          <div className="split-head">
-            <div>
-              <div className="section-eyebrow">Add-on</div>
-              <h2 className="section-h2">One-off events</h2>
-            </div>
-            <p className="section-lede">
-              Need something for a team day, away-day, or end-of-year celebration?
-              A single class or workshop — yoga, meditation, or breathwork — can be booked
-              as a standalone event with no ongoing commitment. From&nbsp;£280 for up to
-              25 participants.
-            </p>
-          </div>
-          <div style={{ marginTop: "2rem" }}>
-            <Link href="/contact" className="btn btn-sun btn-lg">
-              Enquire about an event <Icon name="arrow-right" size={14} />
-            </Link>
-            <Link href="/corporate" className="btn btn-ghost btn-lg" style={{ marginLeft: "1rem" }}>
-              More about corporate &rarr;
-            </Link>
-          </div>
-        </section>
-      )}
-
-      {/* Included on every plan */}
+      {/* What's always included */}
       <section className="pricing-included-wrap">
         <div className="pricing-included">
-          <div className="section-eyebrow">What&apos;s included</div>
-          <h2 className="section-h2">
-            Included on <em>every plan</em>
-          </h2>
+          <div className="split-head" style={{ marginBottom: 32 }}>
+            <div>
+              <div className="section-eyebrow">Included on every plan</div>
+              <h2 className="section-h2">No <em>add&#x2011;ons.</em> No surprises.</h2>
+            </div>
+            <p className="section-lede">Whichever door your members come through, this is what they get.</p>
+          </div>
           <div className="included-grid">
-            {includedItems.map((item, i) => (
-              <div key={i} className="incl">
-                <div className="incl-icon">
-                  <Icon name={item.icon} size={22} />
-                </div>
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
-              </div>
-            ))}
+            <div className="incl">
+              <div className="incl-num">01</div>
+              <h4>The full app library</h4>
+              <p>120+ recorded classes, guided meditations, breathwork, sound bowls, podcast, articles.</p>
+            </div>
+            <div className="incl">
+              <div className="incl-num">02</div>
+              <h4>Live class bookings</h4>
+              <p>Book into any class at your employer&apos;s office or your co&#x2011;working space, in two taps.</p>
+            </div>
+            <div className="incl">
+              <div className="incl-num">03</div>
+              <h4>Anonymous by default</h4>
+              <p>Nobody at work &mdash; HR, managers, your employer&apos;s insurer &mdash; ever sees what you watched.</p>
+            </div>
+            <div className="incl">
+              <div className="incl-num">04</div>
+              <h4>Vetted teachers</h4>
+              <p>Every teacher is Ubud&#x2011;trained, insured, interviewed. One in nine applicants make it onto the roster.</p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* FAQ */}
       <section className="pricing-faq-wrap">
-        <div className="faq">
-          <div className="section-eyebrow">Questions</div>
-          <h2 className="section-h2">Frequently asked</h2>
-          <div className="faq-list">
-            {faqs.map((item, i) => (
-              <details key={i}>
-                <summary>{item.q}</summary>
-                <p>{item.a}</p>
-              </details>
-            ))}
+        <div className="split-head" style={{ marginBottom: 24 }}>
+          <div>
+            <div className="section-eyebrow">Frequently asked questions</div>
+            <h2 className="section-h2">Short answers. <em>No fine print.</em></h2>
           </div>
-          <p style={{ marginTop: "2.5rem" }}>
-            Something else on your mind?{" "}
-            <Link href="/contact">Get in touch</Link> — we reply the same day.
-          </p>
+          <p className="section-lede">The long version is in our terms. If yours isn&apos;t here, email <a href="mailto:hello@workwellyoga.com">hello@workwellyoga.com</a>.</p>
+        </div>
+        <div className="faq">
+          <details open>
+            <summary>Do employees pay anything directly?</summary>
+            <p>No. Work Well Yoga is a business&#x2011;to&#x2011;business subscription. Your employer, your insurer, or your co&#x2011;working space pays us &mdash; your employees get access at no personal cost.</p>
+          </details>
+          <details>
+            <summary>What&apos;s the minimum contract length?</summary>
+            <p>One month. Cancel with seven days&apos; notice, no questions. Most clients stay for 18+ months; a handful have cancelled. Both are fine.</p>
+          </details>
+          <details>
+            <summary>What happens if nobody turns up to a class?</summary>
+            <p>The teacher still gets paid. We still learn something. We&apos;ll send a quiet note suggesting a format or time change &mdash; these adjustments are included in the Quarterly plan&apos;s review call.</p>
+          </details>
+          <details>
+            <summary>Do we need a dedicated room?</summary>
+            <p>Ideally yes &mdash; a quiet meeting room with the chairs stacked to the side. We bring 15 mats, blocks, straps and a Bluetooth speaker. If you&apos;re tight on space we can run shorter seated sessions at desks.</p>
+          </details>
+          <details>
+            <summary>Can employees claim Work Well Yoga through their health insurance?</summary>
+            <p>No &mdash; they can&apos;t claim it directly. Access is arranged through the employer or health insurer, not the individual. If you&apos;re covered, your insurance provider will let you know as part of your plan&apos;s benefits.</p>
+          </details>
+          <details>
+            <summary>Can we try a single class before subscribing?</summary>
+            <p>Yes. A one&#x2011;off class is &pound;280 all&#x2011;in, anywhere in London zones 1&ndash;3. Credit it against your first three months if you subscribe within 30 days.</p>
+          </details>
         </div>
       </section>
 
@@ -342,27 +295,11 @@ export default function PricingPage() {
       <section className="app-cta">
         <div className="app-cta-inner">
           <div>
-            <div className="section-eyebrow" style={{ color: "var(--sun)" }}>
-              Get started
-            </div>
-            <h2>
-              Ready to bring yoga <em>to your team?</em>
-            </h2>
-            <p>
-              Most plans are up and running within a week. Tell us a bit about your team
-              and we&apos;ll match you with the right teacher and schedule.
-            </p>
+            <div className="section-eyebrow" style={{ color: "var(--sun)" }}>The next step</div>
+            <p>We&apos;ll ask five questions about your team or your members. You&apos;ll leave with a clear sense of fit &mdash; ours and yours.</p>
             <div className="store-row">
-              <Link href="/contact" className="btn btn-sun btn-lg">
-                Book a call <Icon name="arrow-right" size={14} />
-              </Link>
-              <Link
-                href="/individual"
-                className="btn btn-ghost btn-lg"
-                style={{ borderColor: "rgba(255,255,255,0.3)", color: "#fff" }}
-              >
-                I&apos;m an individual &rarr;
-              </Link>
+              <Link href="/contact" className="btn btn-sun btn-lg">Book an intro call <Icon name="arrow-right" size={14} /></Link>
+              <Link href="/individual" className="btn btn-ghost btn-lg" style={{ borderColor: "rgba(255,255,255,0.3)", color: "#fff" }}>See the app first &rarr;</Link>
             </div>
           </div>
         </div>

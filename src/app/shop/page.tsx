@@ -6,6 +6,10 @@ import { Icon } from "@/components/icons";
 const categories = [
   { id: "all", label: "All" },
   { id: "mat", label: "Mats & Props" },
+  { id: "wear", label: "Wear" },
+  { id: "home", label: "Home" },
+  { id: "read", label: "Read" },
+  { id: "scent", label: "Scent" },
 ];
 
 const products = [
@@ -23,9 +27,56 @@ const products = [
   { id: 12, cat: "mat", badge: null, brand: "Manduka", name: "eQua Microfibre Towel", price: "\u00a338", blurb: "Grips like glue when wet. Machine wash, line dry.", swatch: "#6a8ea3" },
 ];
 
+type SortKey = "default" | "price-asc" | "price-desc" | "name-asc" | "name-desc";
+
+function parsePrice(s: string): number {
+  return parseFloat(s.replace(/[^\d.]/g, "")) || 0;
+}
+
+async function handleBuy(name: string, brand: string, price: string) {
+  try {
+    const amount = parsePrice(price);
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mode: "payment",
+        items: [{ name: `${brand} — ${name}`, price: amount }],
+      }),
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert("Checkout error: " + (data.error || "unknown error"));
+    }
+  } catch (err) {
+    alert("Failed to start checkout: " + (err instanceof Error ? err.message : err));
+  }
+}
+
 export default function ShopPage() {
   const [cat, setCat] = useState("all");
-  const filtered = cat === "all" ? products : products.filter((p) => p.cat === cat);
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState<SortKey>("default");
+
+  const filtered = products
+    .filter((p) => {
+      const matchesCat = cat === "all" || p.cat === cat;
+      const matchesSearch = search === "" || [p.brand, p.name, p.blurb, p.cat].some(
+        (field) => field.toLowerCase().includes(search.toLowerCase())
+      );
+      return matchesCat && matchesSearch;
+    })
+    .sort((a, b) => {
+      switch (sort) {
+        case "price-asc": return parsePrice(a.price) - parsePrice(b.price);
+        case "price-desc": return parsePrice(b.price) - parsePrice(a.price);
+        case "name-asc": return a.name.localeCompare(b.name);
+        case "name-desc": return b.name.localeCompare(a.name);
+        default: return 0;
+      }
+    });
 
   return (
     <>
@@ -50,9 +101,25 @@ export default function ShopPage() {
               {c.label}
             </button>
           ))}
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as SortKey)}
+            className="sf-chip"
+            style={{ marginLeft: "auto", cursor: "pointer" }}
+          >
+            <option value="default">Sort by</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="name-asc">Name: A–Z</option>
+            <option value="name-desc">Name: Z–A</option>
+          </select>
           <div className="sf-right">
             <Icon name="search" size={14} />
-            <input placeholder="Search \u2014 'block', 'incense', 'legging'..." />
+            <input
+              placeholder="Search — 'block', 'incense', 'legging'..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
         </div>
       </section>
@@ -74,7 +141,7 @@ export default function ShopPage() {
                 <p className="product-blurb">{p.blurb}</p>
                 <div className="product-foot">
                   <div className="product-price">{p.price}</div>
-                  <button className="product-cta">
+                  <button className="product-cta" onClick={() => handleBuy(p.name, p.brand, p.price)}>
                     Buy <Icon name="arrow-right" size={12} />
                   </button>
                 </div>
@@ -84,6 +151,11 @@ export default function ShopPage() {
               </div>
             </article>
           ))}
+          {filtered.length === 0 && (
+            <p style={{ gridColumn: "1 / -1", textAlign: "center", color: "var(--ink-3)", padding: "48px 0" }}>
+              No products match your search.
+            </p>
+          )}
         </div>
       </section>
     </>

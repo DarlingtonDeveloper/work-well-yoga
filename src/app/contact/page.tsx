@@ -6,357 +6,193 @@ import { Icon } from "@/components/icons";
 
 const reasons = [
   { id: "employer", label: "I want Work Well Yoga at my workplace", eye: "Employer enquiry" },
-  { id: "cowork", label: "I run a co‑working space", eye: "Co‑working partnership" },
-  { id: "teacher", label: "I'd like to teach with you", eye: "Teacher application" },
+  { id: "cowork", label: "I run a co\u2011working space", eye: "Co\u2011working partnership" },
+  { id: "teacher", label: "I\u2019d like to teach with you", eye: "Teacher application" },
   { id: "press", label: "Press, podcast or partnership", eye: "Press & collaborations" },
-  { id: "member", label: "I'm a member with a question", eye: "Member support" },
+  { id: "member", label: "I\u2019m a member with a question", eye: "Member support" },
   { id: "other", label: "Something else", eye: "General" },
 ];
 
-function fieldsFor(reason: string) {
-  switch (reason) {
-    case "employer":
-      return (
-        <>
-          <div className="cf-field">
-            <label>Company name <span className="cf-req">*</span></label>
-            <input type="text" name="company_name" required placeholder="e.g. Acme Ltd" />
-          </div>
-          <div className="cf-field">
-            <label>Your role <span className="cf-req">*</span></label>
-            <input type="text" name="role" required placeholder="e.g. Head of People" />
-          </div>
-          <div className="cf-field">
-            <label>Approximate headcount</label>
-            <select name="headcount">
-              <option value="">Select…</option>
-              <option value="under-20">Under 20</option>
-              <option value="20-50">20–50</option>
-              <option value="50-150">50–150</option>
-              <option value="150-500">150–500</option>
-              <option value="500+">500+</option>
-            </select>
-          </div>
-          <div className="cf-field">
-            <label>London office(s)</label>
-            <input type="text" name="offices" placeholder="e.g. Shoreditch, Liverpool Street" />
-          </div>
-          <div className="cf-field">
-            <label>What&rsquo;s prompting this now?</label>
-            <textarea name="prompt" rows={4} placeholder="Tell us a little about what you have in mind…" />
-          </div>
-        </>
-      );
-    case "cowork":
-      return (
-        <>
-          <div className="cf-field">
-            <label>Space name <span className="cf-req">*</span></label>
-            <input type="text" name="space_name" required placeholder="e.g. The Hangar Collective" />
-          </div>
-          <div className="cf-field">
-            <label>Your role <span className="cf-req">*</span></label>
-            <input type="text" name="role" required placeholder="e.g. Community Manager" />
-          </div>
-          <div className="cf-field">
-            <label>Number of locations</label>
-            <input type="text" name="locations" placeholder="e.g. 3" />
-          </div>
-          <div className="cf-field">
-            <label>Approx. members</label>
-            <select name="members">
-              <option value="">Select…</option>
-              <option value="under-50">Under 50</option>
-              <option value="50-150">50–150</option>
-              <option value="150-500">150–500</option>
-              <option value="500-1000">500–1,000</option>
-              <option value="1000+">1,000+</option>
-            </select>
-          </div>
-          <div className="cf-field">
-            <label>What do you currently offer wellness-wise?</label>
-            <textarea name="wellness" rows={4} placeholder="e.g. monthly massage, meditation app subscription…" />
-          </div>
-        </>
-      );
-    case "teacher":
-      return (
-        <>
-          <div className="cf-field">
-            <label>Your name <span className="cf-req">*</span></label>
-            <input type="text" name="name" required placeholder="Full name" />
-          </div>
-          <div className="cf-field">
-            <label>Where you currently teach <span className="cf-req">*</span></label>
-            <input type="text" name="current_studio" required placeholder="e.g. Studio X, corporate clients, online" />
-          </div>
-          <div className="cf-field">
-            <label>Years teaching</label>
-            <select name="years_teaching">
-              <option value="">Select…</option>
-              <option value="under-1">Under 1 year</option>
-              <option value="1-3">1–3 years</option>
-              <option value="3-5">3–5 years</option>
-              <option value="5-10">5–10 years</option>
-              <option value="10+">10+ years</option>
-            </select>
-          </div>
-          <div className="cf-field">
-            <label>Primary formats</label>
-            <input type="text" name="formats" placeholder="e.g. Vinyasa, Yin, Breathwork" />
-          </div>
-          <div className="cf-field">
-            <label>Link to 2-min video <span className="cf-req">*</span></label>
-            <input type="url" name="video_link" required placeholder="https://…" />
-          </div>
-          <div className="cf-field">
-            <label>Training lineage</label>
-            <textarea name="lineage" rows={4} placeholder="Schools, teachers, certifications…" />
-          </div>
-        </>
-      );
-    case "press":
-      return (
-        <>
-          <div className="cf-field">
-            <label>Your name <span className="cf-req">*</span></label>
-            <input type="text" name="name" required placeholder="Full name" />
-          </div>
-          <div className="cf-field">
-            <label>Publication / podcast / org <span className="cf-req">*</span></label>
-            <input type="text" name="publication" required placeholder="e.g. Condé Nast Traveller" />
-          </div>
-          <div className="cf-field">
-            <label>Deadline</label>
-            <input type="date" name="deadline" />
-          </div>
-          <div className="cf-field">
-            <label>What you&rsquo;re working on <span className="cf-req">*</span></label>
-            <textarea name="brief" rows={4} required placeholder="Give us a brief overview of the piece or feature…" />
-          </div>
-        </>
-      );
-    case "member":
-      return (
-        <>
-          <div className="cf-field">
-            <label>Your name <span className="cf-req">*</span></label>
-            <input type="text" name="name" required placeholder="Full name" />
-          </div>
-          <div className="cf-field">
-            <label>Email on your account <span className="cf-req">*</span></label>
-            <input type="email" name="account_email" required placeholder="the address you signed up with" />
-          </div>
-          <div className="cf-field">
-            <label>Your question <span className="cf-req">*</span></label>
-            <textarea name="question" rows={5} required placeholder="How can we help?" />
-          </div>
-        </>
-      );
-    case "other":
-    default:
-      return (
-        <>
-          <div className="cf-field">
-            <label>Your name <span className="cf-req">*</span></label>
-            <input type="text" name="name" required placeholder="Full name" />
-          </div>
-          <div className="cf-field">
-            <label>What&rsquo;s on your mind? <span className="cf-req">*</span></label>
-            <textarea name="message" rows={6} required placeholder="Tell us anything…" />
-          </div>
-        </>
-      );
-  }
+interface Field {
+  label: string;
+  required?: boolean;
+  type?: "textarea" | "select";
+  placeholder?: string;
+  options?: string[];
+}
+
+function fieldsFor(id: string): Field[] {
+  if (id === "employer") return [
+    { label: "Company name", required: true },
+    { label: "Your role", required: true },
+    { label: "Approximate headcount", type: "select", options: ["Under 20", "20\u201350", "50\u2013150", "150\u2013500", "500+"] },
+    { label: "London office(s)", placeholder: "e.g. Shoreditch, remote\u2011first" },
+    { label: "What\u2019s prompting this now?", type: "textarea", placeholder: "A recent engagement survey, a new leadership team, or just curiosity \u2014 all fine answers." },
+  ];
+  if (id === "cowork") return [
+    { label: "Space name", required: true },
+    { label: "Your role", required: true },
+    { label: "Number of locations" },
+    { label: "Approx. members across all sites", type: "select", options: ["Under 100", "100\u2013300", "300\u2013800", "800\u20132,000", "2,000+"] },
+    { label: "What do you currently offer your members wellness\u2011wise?", type: "textarea" },
+  ];
+  if (id === "teacher") return [
+    { label: "Your name", required: true },
+    { label: "Where you currently teach", required: true, placeholder: "Studios, gyms, private clients" },
+    { label: "Years teaching", type: "select", options: ["Under 2", "2\u20134", "5\u20137", "8\u201312", "12+"] },
+    { label: "Primary formats", placeholder: "e.g. Vinyasa, yin, sound" },
+    { label: "Link to a 2\u2011min teaching video", placeholder: "Unlisted YouTube, Vimeo, Google Drive", required: true },
+    { label: "Training lineage", type: "textarea", placeholder: "Where you did your 200hr, anyone you studied with, courses since." },
+  ];
+  if (id === "press") return [
+    { label: "Your name", required: true },
+    { label: "Publication / podcast / org", required: true },
+    { label: "Deadline, if any", placeholder: "We reply within 48hr in any case" },
+    { label: "What you\u2019re working on", type: "textarea", required: true },
+  ];
+  if (id === "member") return [
+    { label: "Your name", required: true },
+    { label: "Email on your account", required: true },
+    { label: "Your question", type: "textarea", required: true, placeholder: "Billing, a technical issue, a teacher you\u2019d like to book privately \u2014 anything." },
+  ];
+  return [
+    { label: "Your name", required: true },
+    { label: "What\u2019s on your mind?", type: "textarea", required: true },
+  ];
 }
 
 export default function ContactPage() {
   const [reason, setReason] = useState("employer");
-
-  const activeReason = reasons.find((r) => r.id === reason)!;
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    alert("Thanks for getting in touch — we'll be back with you shortly.");
-  }
-
-  function scrollToFormAndSetTeacher() {
-    setReason("teacher");
-    const el = document.getElementById("contact-form-anchor");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }
+  const active = reasons.find((r) => r.id === reason)!;
+  const fields = fieldsFor(reason);
 
   return (
-    <main className="contact-main">
-      {/* ── Two-column layout ─────────────────────────────── */}
-      <div className="contact-columns">
-
-        {/* Left — form */}
-        <div className="contact-form-wrap" id="contact-form-anchor">
-          {/* Reason tabs */}
-          <nav className="contact-tabs" aria-label="Contact reason">
-            <ul className="contact-tab-list" role="tablist">
+    <>
+      <section className="contact-main">
+        <div className="contact-form-wrap">
+          <div className="contact-tabs">
+            <div className="contact-tabs-label">I&apos;m writing because&hellip;</div>
+            <div className="contact-tab-list">
               {reasons.map((r) => (
-                <li key={r.id} role="presentation">
-                  <button
-                    role="tab"
-                    aria-selected={reason === r.id}
-                    className={`contact-tab${reason === r.id ? " contact-tab--active" : ""}`}
-                    onClick={() => setReason(r.id)}
-                    type="button"
-                  >
-                    {r.label}
-                  </button>
-                </li>
+                <button
+                  key={r.id}
+                  className={"contact-tab " + (reason === r.id ? "active" : "")}
+                  onClick={() => setReason(r.id)}
+                >
+                  {r.label}
+                </button>
               ))}
-            </ul>
-          </nav>
+            </div>
+          </div>
 
-          {/* Dynamic form */}
-          <form
-            className="contact-form"
-            onSubmit={handleSubmit}
-            aria-labelledby="cf-heading"
-          >
+          <form className="contact-form" onSubmit={(e) => { e.preventDefault(); alert("In the real build this submits \u2014 for now, email hello@workwellyoga.com"); }}>
             <div className="cf-head">
-              <p className="cf-eye">{activeReason.eye}</p>
-              <h1 id="cf-heading">Get in touch</h1>
+              <div className="cf-eye">{active.eye}</div>
+              <h2>Tell us a little.</h2>
             </div>
 
-            {fieldsFor(reason)}
+            {fields.map((f, i) => (
+              <div key={i} className="cf-field">
+                <label>
+                  {f.label}
+                  {f.required && <span className="cf-req">*</span>}
+                </label>
+                {f.type === "textarea" ? (
+                  <textarea rows={4} placeholder={f.placeholder || ""} />
+                ) : f.type === "select" ? (
+                  <select defaultValue="">
+                    <option value="" disabled>Choose one</option>
+                    {f.options!.map((o, j) => <option key={j}>{o}</option>)}
+                  </select>
+                ) : (
+                  <input type="text" placeholder={f.placeholder || ""} />
+                )}
+              </div>
+            ))}
 
-            {/* Always-present email field */}
             <div className="cf-field">
               <label>Your email <span className="cf-req">*</span></label>
-              <input type="email" name="email" required placeholder="you@example.com" />
+              <input type="email" placeholder="you@yourcompany.com" />
             </div>
 
             <div className="cf-foot">
-              <button type="submit" className="btn-dark">
-                Send message
-                <Icon name="arrow-right" size={18} />
-              </button>
+              <button type="submit" className="btn btn-dark btn-lg">Send message <Icon name="arrow-right" size={14} /></button>
+              <div className="cf-reassure">
+                <Icon name="check" size={14} /> We reply within 48 hours &middot; Never shared &middot; GDPR&#x2011;handled
+              </div>
             </div>
           </form>
         </div>
 
-        {/* Right — side panel */}
         <aside className="contact-side">
-          {/* Contact info card */}
           <div className="side-card">
-            <p className="side-lbl">Contact</p>
-
+            <div className="side-lbl">Faster routes</div>
             <div className="side-row">
-              <Icon name="phone" size={16} />
-              <a href="tel:+442012345678">+44 (0)20 1234 5678</a>
+              <div className="side-k">Call (weekdays 9&ndash;5)</div>
+              <div className="side-v"><a href="tel:+447803340153">07803 340153</a></div>
             </div>
-
             <div className="side-row">
-              <Icon name="mail" size={16} />
-              <div>
-                <p className="side-sublbl">General</p>
-                <a href="mailto:hello@workwellyoga.co.uk">hello@workwellyoga.co.uk</a>
-              </div>
+              <div className="side-k">Email</div>
+              <div className="side-v"><a href="mailto:hello@workwellyoga.com">hello@workwellyoga.com</a></div>
             </div>
-
             <div className="side-row">
-              <Icon name="mail" size={16} />
-              <div>
-                <p className="side-sublbl">Teachers</p>
-                <a href="mailto:teach@workwellyoga.co.uk">teach@workwellyoga.co.uk</a>
-              </div>
+              <div className="side-k">Teachers</div>
+              <div className="side-v"><a href="mailto:teachers@workwellyoga.com">teachers@workwellyoga.com</a></div>
             </div>
-
             <div className="side-row">
-              <Icon name="mail" size={16} />
-              <div>
-                <p className="side-sublbl">Press</p>
-                <a href="mailto:press@workwellyoga.co.uk">press@workwellyoga.co.uk</a>
-              </div>
+              <div className="side-k">Press</div>
+              <div className="side-v"><a href="mailto:press@workwellyoga.com">press@workwellyoga.com</a></div>
             </div>
           </div>
 
-          {/* Social links card */}
           <div className="side-card side-card-tint">
-            <p className="side-lbl">Find us</p>
-
-            <div className="side-social">
-              <Link
-                href="https://instagram.com/workwell.yoga"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ss-icon ss-ig"
-                aria-label="Instagram @workwell.yoga"
-              >
-                {/* Instagram SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                  <circle cx="12" cy="12" r="4" />
-                  <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
-                </svg>
-                <span>@workwell.yoga</span>
-              </Link>
-
-              <Link
-                href="https://linkedin.com/company/work-well-yoga"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ss-icon ss-li"
-                aria-label="LinkedIn"
-              >
-                {/* LinkedIn SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                  <rect x="2" y="9" width="4" height="12" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
-                <span>LinkedIn</span>
-              </Link>
-
-              <Link
-                href="https://podcasts.apple.com/workwellyoga"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ss-icon ss-sp"
-                aria-label="Podcast: Between the Breaths"
-              >
-                {/* Podcast / headphones SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
-                  <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
-                </svg>
-                <span>Between the Breaths</span>
-              </Link>
-            </div>
+            <div className="side-lbl">Social</div>
+            <a className="side-social" href="#" onClick={(e) => e.preventDefault()}>
+              <span className="ss-icon ss-ig"><Icon name="heart" size={16} /></span>
+              <div>
+                <div className="ss-name">@workwell.yoga</div>
+                <div className="ss-meta">Instagram &middot; weekly micro&#x2011;classes</div>
+              </div>
+              <Icon name="arrow-right" size={14} />
+            </a>
+            <a className="side-social" href="#" onClick={(e) => e.preventDefault()}>
+              <span className="ss-icon ss-li"><Icon name="check" size={16} /></span>
+              <div>
+                <div className="ss-name">Work Well Yoga on LinkedIn</div>
+                <div className="ss-meta">HR conversations &middot; hiring</div>
+              </div>
+              <Icon name="arrow-right" size={14} />
+            </a>
+            <a className="side-social" href="#" onClick={(e) => e.preventDefault()}>
+              <span className="ss-icon ss-sp"><Icon name="play" size={16} /></span>
+              <div>
+                <div className="ss-name">Between the Breaths</div>
+                <div className="ss-meta">Our podcast &middot; fortnightly</div>
+              </div>
+              <Icon name="arrow-right" size={14} />
+            </a>
           </div>
         </aside>
-      </div>
+      </section>
 
-      {/* ── Teach with us ─────────────────────────────────── */}
-      <section className="teach-wrap teach-wrap-simple">
-        <div className="teach-inner">
-          <div className="teach-copy">
-            <p className="cf-eye">Join the team</p>
-            <h2>Teach with us</h2>
-            <p>
-              We work with independent yoga and breathwork teachers who bring real expertise to
-              the workplace. If that sounds like you, we&rsquo;d love to hear from you.
-            </p>
-          </div>
-          <div className="teach-cta">
-            <button
-              type="button"
-              className="btn-dark"
-              onClick={scrollToFormAndSetTeacher}
-            >
-              Apply to teach
-              <Icon name="arrow-right" size={18} />
+      {/* Teach with us */}
+      <section className="teach-wrap teach-wrap-simple" id="teach">
+        <div className="teach-simple">
+          <div className="eyebrow">Teach with us</div>
+          <h2 className="section-h2">Looking to teach <em>with Work Well Yoga?</em></h2>
+          <p className="teach-lede">
+            We&apos;d love to hear from qualified yoga teachers, breathwork guides and meditation practitioners. Drop us a line and tell us about yourself.
+          </p>
+          <div className="teach-ctas" style={{ justifyContent: "center" }}>
+            <button className="btn btn-sun btn-lg" onClick={() => {
+              setReason("teacher");
+              setTimeout(() => document.querySelector(".contact-form-wrap")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+            }}>
+              Get in touch <Icon name="arrow-right" size={14} />
             </button>
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }

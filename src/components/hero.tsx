@@ -219,15 +219,16 @@ export function HeroSun({ headline, sub, cta }: HeroProps) {
               )}
             </span>
           </button>
-          <div className="breath-overlay" style={{ opacity: playing ? 1 : 0 }}>
-            <div className="breath-phase">
-              {phase === "In" ? "breathe in" : phase === "Out" ? "breathe out" : "hold"}
+          {playing && (
+            <div className="breath-overlay" style={{ opacity: 1 }}>
+              <div className="breath-phase">
+                {phase === "In" ? "breathe in" : phase === "Out" ? "breathe out" : "hold"}
+              </div>
+              <div className="breath-count">
+                {Math.max(1, Math.ceil(BREATH.find((b) => b.phase === phase)!.dur * (1 - t)))}
+              </div>
             </div>
-            <div className="breath-count">
-              {Math.max(1, Math.ceil(BREATH.find((b) => b.phase === phase)!.dur * (1 - t)))}
-            </div>
-          </div>
-          <div className="sun-hint">{playing ? "Pause" : "Breathe with me"}</div>
+          )}
           <div className="sun-leaves">
             <svg width="60" height="60" style={{ top: "8%", left: "4%", transform: "rotate(-20deg)", position: "absolute" }} viewBox="0 0 40 40">
               <path d="M5 35 Q 20 5 35 35" stroke="#088395" fill="none" strokeWidth="1" />
@@ -250,13 +251,11 @@ export function HeroSun({ headline, sub, cta }: HeroProps) {
             <Icon name="play" size={12} /> Watch a 90&#x2011;sec practice
           </button>
         </div>
-        <div className="hero-meta">
-          <strong>4.9 &#9733;</strong>
-          <span className="dot" />
+        <div style={{ marginTop: 40, display: "flex", alignItems: "center", justifyContent: "center", gap: 12, fontSize: 13, color: "var(--ink-3)" }}>
           <Link href="/corporate" className="hero-meta-link">
             Corporate subscriptions
           </Link>
-          <span className="dot" />
+          <span className="dot" style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--sun)" }} />
           <a className="hero-meta-link" href="#insurance" onClick={(e) => e.preventDefault()}>
             Access through health insurance &rarr;
           </a>
