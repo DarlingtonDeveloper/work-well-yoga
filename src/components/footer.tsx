@@ -38,12 +38,12 @@ export function MiniFoot() {
       </div>
       <div className="f-links">
         <Link href="/pricing">Pricing</Link>
-        <a>Gallery</a>
-        <a>Privacy</a>
-        <a>Terms</a>
-        <a>Studios</a>
-        <a>Press</a>
-        <a>Instagram</a>
+        <Link href="/shop">Shop</Link>
+        <Link href="/partners">Teach with us</Link>
+        <Link href="/contact">Contact</Link>
+        <Link href="/download">The app</Link>
+        <Link href="/corporate">For employers</Link>
+        <Link href="/individual">For employees</Link>
       </div>
       <div style={{ fontSize: 12 }}>
         &copy; 2026 Work Well Yoga &middot; Made with care in London

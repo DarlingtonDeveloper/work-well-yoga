@@ -109,11 +109,7 @@ export function Struggles() {
           </span>
         </div>
         <div className="why-grid">
-          <Link
-            href="/individual"
-            className="why-col why-employee"
-            style={{ textAlign: "left", font: "inherit", color: "inherit" }}
-          >
+          <Link href="/individual" className="why-col why-employee">
             <div className="why-lbl">
               For employees{" "}
               <span aria-hidden="true" style={{ opacity: 0.55, marginLeft: 6 }}>
@@ -121,11 +117,7 @@ export function Struggles() {
               </span>
             </div>
           </Link>
-          <Link
-            href="/corporate"
-            className="why-col why-employer"
-            style={{ textAlign: "left", font: "inherit", color: "inherit" }}
-          >
+          <Link href="/corporate" className="why-col why-employee">
             <div className="why-lbl">
               For employers{" "}
               <span aria-hidden="true" style={{ opacity: 0.55, marginLeft: 6 }}>
