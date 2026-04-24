@@ -3994,3 +3994,100 @@ button.hero-eyebrow:hover { background: rgba(8,131,149,0.12); transform: transla
   .crs-nav-btn { max-width: 100%; }
   .crs-nav-btn-next { margin-left: 0; }
 }
+
+/* ======================== Practice Page ======================== */
+.prac-main { min-height: 100vh; background: var(--cream); padding: 40px 20px 80px; }
+.prac-inner { max-width: 680px; margin: 0 auto; }
+.prac-back { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-3); margin-bottom: 24px; transition: color 0.15s; text-decoration: none; }
+.prac-back:hover { color: var(--ink); }
+.prac-back-arrow { display: inline-flex; transform: rotate(180deg); }
+.prac-h1 { font-family: var(--serif); font-size: 30px; font-weight: 400; letter-spacing: -0.02em; margin: 0 0 4px; }
+.prac-sub { font-size: 15px; color: var(--ink-2); margin: 0 0 28px; }
+.prac-h2 { font-family: var(--serif); font-size: 20px; font-weight: 400; margin: 0 0 14px; }
+
+.prac-streak-card { background: #fff; border-radius: 14px; border: 1px solid var(--line); padding: 24px; margin-bottom: 24px; text-align: center; }
+.prac-streak-top { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.prac-streak-flame { display: flex; align-items: center; gap: 6px; color: var(--sun); }
+.prac-streak-num { font-size: 36px; font-weight: 700; font-family: var(--serif); line-height: 1; color: var(--ink); }
+.prac-streak-label { font-size: 15px; color: var(--ink-2); font-weight: 450; }
+.prac-streak-best { font-size: 13px; color: var(--ink-3); padding: 3px 10px; background: #f8f4f6; border-radius: 20px; }
+
+.prac-week { display: flex; justify-content: center; gap: 16px; }
+.prac-week-day { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.prac-week-dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--line); transition: all 0.2s; }
+.prac-week-dot-active { background: var(--teal); border-color: var(--teal); }
+.prac-week-label { font-size: 11px; color: var(--ink-3); font-weight: 500; }
+
+.prac-log-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; background: var(--teal); color: #fff; border-radius: 12px; font-size: 15px; font-weight: 550; border: none; cursor: pointer; transition: background 0.15s; margin-bottom: 24px; }
+.prac-log-btn:hover { background: var(--teal-deep); }
+
+.prac-log-form { background: #fff; border-radius: 14px; border: 1px solid var(--line); padding: 24px; margin-bottom: 24px; }
+.prac-log-title { font-family: var(--serif); font-size: 18px; font-weight: 400; margin: 0 0 16px; }
+.prac-log-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.prac-log-full { grid-column: 1 / -1; }
+.prac-log-label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 550; color: var(--ink-2); }
+.prac-log-label select,
+.prac-log-label input[type="date"],
+.prac-log-label input[type="text"],
+.prac-log-label input:not([type]) { padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px; font-family: var(--sans); background: #fff; color: var(--ink); }
+
+.prac-duration-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.prac-dur-chip { padding: 8px 14px; border-radius: 20px; border: 1px solid var(--line); background: #fff; font-size: 13px; font-weight: 550; cursor: pointer; transition: all 0.12s; color: var(--ink-2); }
+.prac-dur-chip:hover { border-color: var(--teal); color: var(--teal-deep); }
+.prac-dur-active { background: var(--teal); border-color: var(--teal); color: #fff; }
+.prac-dur-active:hover { background: var(--teal-deep); border-color: var(--teal-deep); color: #fff; }
+.prac-dur-custom { width: 56px; padding: 8px 6px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; text-align: center; font-family: var(--sans); }
+
+.prac-log-actions { display: flex; gap: 10px; margin-top: 18px; }
+.prac-btn { padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 550; cursor: pointer; border: 1px solid var(--line); background: #fff; color: var(--ink-2); transition: all 0.12s; }
+.prac-btn:hover { border-color: var(--ink-3); }
+.prac-btn-primary { background: var(--teal); border-color: var(--teal); color: #fff; }
+.prac-btn-primary:hover { background: var(--teal-deep); border-color: var(--teal-deep); }
+.prac-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.prac-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.prac-stat { background: #fff; border-radius: 10px; border: 1px solid var(--line); padding: 16px; text-align: center; }
+.prac-stat-value { font-size: 20px; font-weight: 650; color: var(--ink); font-family: var(--serif); }
+.prac-stat-label { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+
+.prac-section { margin-top: 28px; }
+.prac-empty { font-size: 14px; color: var(--ink-3); text-align: center; padding: 32px 0; }
+
+.prac-fav-list { display: flex; flex-direction: column; gap: 8px; }
+.prac-fav-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #fff; border: 1px solid var(--line); border-radius: 10px; }
+.prac-fav-info { flex: 1; }
+.prac-fav-name { font-weight: 500; font-size: 14px; }
+.prac-fav-brand { font-size: 12px; color: var(--ink-3); }
+.prac-fav-go { color: var(--teal-deep); padding: 6px; transition: color 0.15s; }
+.prac-fav-go:hover { color: var(--teal); }
+.prac-fav-remove { color: var(--ink-3); padding: 6px; background: none; border: none; cursor: pointer; transition: color 0.15s; }
+.prac-fav-remove:hover { color: var(--sun); }
+
+.prac-history { display: flex; flex-direction: column; gap: 6px; }
+.prac-session-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #fff; border: 1px solid var(--line); border-radius: 10px; flex-wrap: wrap; }
+.prac-session-type { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 14px; min-width: 140px; }
+.prac-type-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.prac-type-meditation { background: var(--teal); }
+.prac-type-journaling { background: var(--sun); }
+.prac-type-breathwork { background: #6BB5E0; }
+.prac-type-reflection { background: #B89AE0; }
+.prac-type-movement { background: #E0A86B; }
+.prac-type-partner { background: #E07B7B; }
+.prac-session-dur { font-size: 13px; color: var(--ink-2); white-space: nowrap; }
+.prac-session-date { font-size: 13px; color: var(--ink-3); white-space: nowrap; }
+.prac-session-note { font-size: 13px; color: var(--ink-3); flex: 1; min-width: 100px; }
+.prac-session-del { color: var(--ink-3); background: none; border: none; cursor: pointer; padding: 4px; opacity: 0.4; transition: opacity 0.15s; margin-left: auto; }
+.prac-session-del:hover { opacity: 1; color: var(--sun); }
+
+.dash-practice-summary { margin-top: 6px; }
+.dash-practice-streak { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 550; color: var(--sun); }
+.dash-practice-week { font-size: 13px; color: var(--ink-3); margin-top: 4px; }
+
+@media (max-width: 640px) {
+  .prac-h1 { font-size: 26px; }
+  .prac-log-grid { grid-template-columns: 1fr; }
+  .prac-week { gap: 10px; }
+  .prac-week-dot { width: 24px; height: 24px; }
+  .prac-stats { grid-template-columns: repeat(2, 1fr); }
+  .prac-session-type { min-width: auto; }
+}
