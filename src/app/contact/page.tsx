@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 
@@ -63,8 +63,47 @@ function fieldsFor(id: string): Field[] {
 
 export default function ContactPage() {
   const [reason, setReason] = useState("employer");
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+
   const active = reasons.find((r) => r.id === reason)!;
   const fields = fieldsFor(reason);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setSending(true);
+
+    const form = formRef.current!;
+    const formFields: Record<string, string> = {};
+    fields.forEach((f, i) => {
+      const el = form.elements.namedItem(`field-${i}`) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null;
+      if (el && el.value) formFields[f.label] = el.value;
+    });
+    const emailEl = form.elements.namedItem("email") as HTMLInputElement;
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          category: reason,
+          name: formFields["Your name"] || formFields["Company name"] || formFields["Space name"] || "",
+          email: emailEl.value,
+          fields: formFields,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong");
+      setSent(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setSending(false);
+    }
+  }
 
   return (
     <>
@@ -85,43 +124,56 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <form className="contact-form" onSubmit={(e) => { e.preventDefault(); alert("In the real build this submits \u2014 for now, email hello@workwellyoga.com"); }}>
+          {sent ? (
+            <div className="contact-sent">
+              <div className="contact-sent-icon"><Icon name="check" size={28} /></div>
+              <h2>Message sent</h2>
+              <p>We&apos;ll get back to you within 48 hours.</p>
+              <button className="btn btn-dark" onClick={() => { setSent(false); setReason("employer"); }}>Send another</button>
+            </div>
+          ) : (
+          <form className="contact-form" ref={formRef} onSubmit={handleSubmit}>
             <div className="cf-head">
               <div className="cf-eye">{active.eye}</div>
               <h2>Tell us a little.</h2>
             </div>
 
             {fields.map((f, i) => (
-              <div key={i} className="cf-field">
+              <div key={`${reason}-${i}`} className="cf-field">
                 <label>
                   {f.label}
                   {f.required && <span className="cf-req">*</span>}
                 </label>
                 {f.type === "textarea" ? (
-                  <textarea rows={4} placeholder={f.placeholder || ""} />
+                  <textarea name={`field-${i}`} rows={4} placeholder={f.placeholder || ""} required={f.required} />
                 ) : f.type === "select" ? (
-                  <select defaultValue="">
+                  <select name={`field-${i}`} defaultValue="" required={f.required}>
                     <option value="" disabled>Choose one</option>
                     {f.options!.map((o, j) => <option key={j}>{o}</option>)}
                   </select>
                 ) : (
-                  <input type="text" placeholder={f.placeholder || ""} />
+                  <input name={`field-${i}`} type="text" placeholder={f.placeholder || ""} required={f.required} />
                 )}
               </div>
             ))}
 
             <div className="cf-field">
               <label>Your email <span className="cf-req">*</span></label>
-              <input type="email" placeholder="you@yourcompany.com" />
+              <input name="email" type="email" placeholder="you@yourcompany.com" required />
             </div>
 
+            {error && <div className="cf-error">{error}</div>}
+
             <div className="cf-foot">
-              <button type="submit" className="btn btn-dark btn-lg">Send message <Icon name="arrow-right" size={14} /></button>
+              <button type="submit" className="btn btn-dark btn-lg" disabled={sending}>
+                {sending ? "Sending\u2026" : "Send message"} {!sending && <Icon name="arrow-right" size={14} />}
+              </button>
               <div className="cf-reassure">
                 <Icon name="check" size={14} /> We reply within 48 hours &middot; Never shared &middot; GDPR&#x2011;handled
               </div>
             </div>
           </form>
+          )}
         </div>
 
         <aside className="contact-side">

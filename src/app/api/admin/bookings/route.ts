@@ -1,103 +1,192 @@
 import { NextResponse } from "next/server";
 import { requireAdmin, getAdminSupabase } from "@/lib/admin";
 
-export async function GET() {
-  const admin = await requireAdmin();
-  if (!admin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+export async function GET(request: Request) {
+  if (!(await requireAdmin())) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const sb = getAdminSupabase();
+  const { searchParams } = new URL(request.url);
+  const eventId = searchParams.get("event_id");
 
-  const { data: bookings, error } = await sb
+  const sb = getAdminSupabase();
+  let query = sb
     .from("bookings")
-    .select("*, events(*, products(id, name))")
+    .select("*, events(id, title, start_at, location, products(name, brand))")
     .order("created_at", { ascending: false });
 
+  if (eventId) {
+    query = query.eq("event_id", Number(eventId));
+  }
+
+  const { data: bookings, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Enrich with user info
-  const { data: usersData } = await sb.auth.admin.listUsers({ perPage: 1000 });
-  const usersMap = new Map(
-    (usersData?.users || []).map((u) => [u.id, u])
+  // Attach user info via auth admin
+  const { data: { users } } = await sb.auth.admin.listUsers({ perPage: 1000 });
+
+  const userMap = new Map(
+    users.map((u) => [
+      u.id,
+      {
+        email: u.email || "",
+        name: u.user_metadata?.full_name || u.email?.split("@")[0] || "",
+        avatar: u.user_metadata?.avatar_url || null,
+      },
+    ])
   );
 
-  const enriched = (bookings || []).map((b) => {
-    const user = usersMap.get(b.user_id);
-    return {
-      ...b,
-      user_email: user?.email || null,
-      user_name: user?.user_metadata?.display_name || user?.user_metadata?.full_name || null,
-    };
-  });
+  const enriched = (bookings || []).map((b) => ({
+    ...b,
+    user_email: userMap.get(b.user_id)?.email || "",
+    user_name: userMap.get(b.user_id)?.name || "",
+    user_avatar: userMap.get(b.user_id)?.avatar || null,
+  }));
 
   return NextResponse.json(enriched);
 }
 
 export async function PUT(request: Request) {
-  const admin = await requireAdmin();
-  if (!admin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await requireAdmin())) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
+  const { id, status } = await request.json();
   const sb = getAdminSupabase();
-  const body = await request.json();
-  const { id, ...updates } = body;
 
-  // If cancelling, set cancelled_at
-  if (updates.status === "cancelled") {
-    updates.cancelled_at = new Date().toISOString();
-  }
-
-  const { data, error } = await sb
+  // Get booking details before update (for auto-message)
+  const { data: booking } = await sb
     .from("bookings")
-    .update(updates)
+    .select("*, events(title, start_at, location), products:product_id(id, name, price, category)")
     .eq("id", id)
-    .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
-}
-
-export async function POST(request: Request) {
-  const admin = await requireAdmin();
-  if (!admin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const update: Record<string, unknown> = { status };
+  if (status === "cancelled") {
+    update.cancelled_at = new Date().toISOString();
   }
 
-  const sb = getAdminSupabase();
-  const body = await request.json();
+  const { error } = await sb.from("bookings").update(update).eq("id", id);
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Check capacity
-  const { data: event } = await sb
-    .from("events")
-    .select("capacity")
-    .eq("id", body.event_id)
-    .single();
+  // Auto-create booking confirmation/rejection message
+  if (booking && (status === "confirmed" || status === "cancelled")) {
+    const { data: { user: authUser } } = await sb.auth.admin.getUserById(booking.user_id);
+    const userName = authUser?.user_metadata?.full_name || authUser?.email?.split("@")[0] || "Customer";
+    const userEmail = authUser?.email || "";
 
-  if (event?.capacity) {
-    const { count } = await sb
-      .from("bookings")
-      .select("*", { count: "exact", head: true })
-      .eq("event_id", body.event_id)
-      .eq("status", "confirmed");
+    const eventData = booking.events as { title: string; start_at: string; location: string | null } | null;
+    const productData = booking.products as { id: number; name: string; price: string; category: string } | null;
+    const itemName = eventData?.title || productData?.name || "your session";
+    const rawDate = booking.requested_at || eventData?.start_at;
+    const parsedDate = rawDate ? new Date(rawDate) : null;
+    const dateStr = parsedDate
+      ? parsedDate.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })
+      : "";
+    const timeStr = parsedDate
+      ? parsedDate.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
+      : "";
 
-    if ((count || 0) >= event.capacity) {
-      return NextResponse.json({ error: "Event is at full capacity" }, { status: 400 });
+    const isConfirmed = status === "confirmed";
+    const whenStr = dateStr ? ` on ${dateStr}${timeStr ? ` at ${timeStr}` : ""}` : "";
+    const subject = isConfirmed
+      ? `Session confirmed — ${itemName}`
+      : `Session request update — ${itemName}`;
+    const locationNote = eventData?.location ? ` Location: ${eventData.location}.` : "";
+    const priceNote = productData?.price ? `\n\nComplete your booking by paying below.` : "";
+    const msgBody = isConfirmed
+      ? `Your request for ${itemName}${whenStr} has been confirmed.${locationNote}${priceNote}`
+      : `Unfortunately we couldn't accommodate your request for ${itemName}${whenStr}. Please try another date or get in touch.`;
+
+    // Try to find the existing booking request conversation to reply in the same thread
+    let convoId: number | null = null;
+    const { data: existingConvo } = await sb
+      .from("conversations")
+      .select("id")
+      .eq("user_id", booking.user_id)
+      .eq("category", "booking")
+      .eq("product_id", booking.product_id)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (existingConvo) {
+      convoId = existingConvo.id;
+      await sb.from("conversations").update({
+        status: isConfirmed ? "closed" : "open",
+        subject,
+      }).eq("id", convoId);
+    } else {
+      const { data: newConvo } = await sb.from("conversations").insert({
+        subject,
+        category: "booking",
+        status: isConfirmed ? "closed" : "open",
+        user_id: booking.user_id,
+        user_name: userName,
+        user_email: userEmail,
+        product_id: booking.product_id || (eventData ? booking.event_id : null),
+      }).select("id").single();
+      convoId = newConvo?.id || null;
+    }
+
+    if (convoId) {
+      await sb.from("messages").insert({
+        conversation_id: convoId,
+        sender_type: "system",
+        body: msgBody,
+        metadata: {
+          booking_id: id,
+          status,
+          event: eventData,
+          requested_at: booking.requested_at,
+          ...(isConfirmed && productData ? {
+            pay: {
+              product_id: productData.id,
+              product_name: productData.name,
+              price: productData.price,
+              category: productData.category,
+            },
+          } : {}),
+        },
+      });
     }
   }
 
+  return NextResponse.json({ ok: true });
+}
+
+export async function POST(request: Request) {
+  if (!(await requireAdmin())) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const { user_id, event_id } = await request.json();
+  const sb = getAdminSupabase();
+
   const { data, error } = await sb
     .from("bookings")
-    .insert({
-      user_id: body.user_id,
-      event_id: body.event_id,
-      status: "confirmed",
-    })
+    .insert({ user_id, event_id, status: "confirmed" })
     .select()
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Update event status if at capacity
+  const { count } = await sb
+    .from("bookings")
+    .select("*", { count: "exact", head: true })
+    .eq("event_id", event_id)
+    .eq("status", "confirmed");
+
+  const { data: ev } = await sb
+    .from("events")
+    .select("capacity")
+    .eq("id", event_id)
+    .single();
+
+  if (ev && count && count >= ev.capacity) {
+    await sb.from("events").update({ status: "full" }).eq("id", event_id);
+  }
+
   return NextResponse.json(data);
 }

@@ -19,6 +19,16 @@ export interface CourseEnrollment {
   completed_lessons: number;
 }
 
+export interface WishlistItem {
+  id: number;
+  name: string;
+  brand: string;
+  price: string;
+  category: string;
+  swatch: string;
+  image_url: string | null;
+}
+
 export interface UserBooking {
   id: number;
   status: string;
@@ -58,6 +68,19 @@ export default async function DashboardPage() {
     .select("id, status, created_at, events(id, title, start_at, end_at, location, status)")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
+
+  // Get wishlist
+  const { data: wishlistRows } = await supabase
+    .from("wishlists")
+    .select("product_id, products(id, name, brand, price, category, swatch, image_url)")
+    .eq("user_id", user.id);
+
+  const wishlistItems: WishlistItem[] = (wishlistRows || [])
+    .filter((w) => w.products)
+    .map((w) => {
+      const p = w.products as unknown as WishlistItem;
+      return { id: p.id, name: p.name, brand: p.brand, price: p.price, category: p.category, swatch: p.swatch, image_url: p.image_url };
+    });
 
   // Get course enrollments with progress
   const coursePurchases = (purchases || []).filter((p) => p.category === "course");
@@ -105,6 +128,7 @@ export default async function DashboardPage() {
       purchases={purchases || []}
       bookings={(bookings as unknown as UserBooking[]) || []}
       enrollments={enrollments}
+      wishlist={wishlistItems}
       isAdmin={profile?.is_admin || false}
     />
   );

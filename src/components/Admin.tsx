@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Icon } from "./icons";
@@ -88,6 +88,22 @@ interface AdminUser {
   is_admin: boolean;
 }
 
+export interface ProductImage {
+  id: number;
+  product_id: number;
+  image_url: string;
+  sort_order: number;
+}
+
+export interface ProductVariant {
+  id: number;
+  product_id: number;
+  name: string;
+  swatch: string | null;
+  image_url: string | null;
+  sort_order: number;
+}
+
 export interface Product {
   id: number;
   category: string;
@@ -102,6 +118,16 @@ export interface Product {
   badge: string | null;
   sort_order: number;
   active: boolean;
+  coming_soon: boolean;
+  preorder_enabled: boolean;
+  preorder_deposit: string | null;
+  release_date: string | null;
+  preorder_list_id: number | null;
+  booking_mode: string | null;
+  recurrence_anchor: string | null;
+  recurrence_interval_months: number | null;
+  product_images?: ProductImage[];
+  product_variants?: ProductVariant[];
 }
 
 export interface Event {
@@ -123,11 +149,13 @@ export interface Event {
 export interface Booking {
   id: number;
   user_id: string;
-  event_id: number;
+  event_id: number | null;
+  product_id: number | null;
   purchase_id: number | null;
   status: string;
   created_at: string;
   cancelled_at: string | null;
+  requested_at: string | null;
   user_email: string;
   user_name: string;
   user_avatar: string | null;
@@ -244,6 +272,7 @@ export function AdminShell({
     { href: "/admin/bookings", label: "Bookings", icon: "check" as const },
     { href: "/admin/mailing", label: "Mailing", icon: "mail" as const },
     { href: "/admin/campaigns", label: "Campaigns", icon: "play" as const },
+    { href: "/admin/messages", label: "Messages", icon: "mail" as const },
   ];
 
   const isActive = (href: string) =>
@@ -660,6 +689,14 @@ const EMPTY_PRODUCT = {
   badge: "",
   sort_order: 0,
   active: true,
+  coming_soon: false,
+  preorder_enabled: false,
+  preorder_deposit: "",
+  release_date: "",
+  preorder_list_id: 0,
+  booking_mode: "",
+  recurrence_anchor: "",
+  recurrence_interval_months: 2,
 };
 
 export function AdminProducts() {
@@ -669,6 +706,108 @@ export function AdminProducts() {
   const [form, setForm] = useState(EMPTY_PRODUCT);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
+
+  // Gallery + variants state
+  const [galleryImages, setGalleryImages] = useState<ProductImage[]>([]);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
+  const [variants, setVariants] = useState<ProductVariant[]>([]);
+  const [newVariant, setNewVariant] = useState({ name: "", swatch: "", image_url: "" });
+  const [uploadingVariantImg, setUploadingVariantImg] = useState(false);
+  const [editingVariant, setEditingVariant] = useState<number | null>(null);
+  const [editVariantForm, setEditVariantForm] = useState({ name: "", swatch: "", image_url: "" });
+  const [mailingLists, setMailingLists] = useState<{ id: number; name: string }[]>([]);
+
+  const loadProductDetails = async (productId: number) => {
+    const res = await fetch(`/api/admin/product-details?product_id=${productId}`);
+    const data = await res.json();
+    setGalleryImages(data.images || []);
+    setVariants(data.variants || []);
+  };
+
+  const uploadFile = async (file: File): Promise<string | null> => {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
+    const data = await res.json();
+    if (data.error) { alert(data.error); return null; }
+    return data.url;
+  };
+
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || typeof editing !== "number") return;
+    setUploadingGallery(true);
+    try {
+      const url = await uploadFile(file);
+      if (url) {
+        await fetch("/api/admin/product-details", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "image", product_id: editing, image_url: url }),
+        });
+        loadProductDetails(editing);
+      }
+    } catch { alert("Upload failed"); }
+    finally { setUploadingGallery(false); e.target.value = ""; }
+  };
+
+  const removeGalleryImage = async (id: number) => {
+    await fetch("/api/admin/product-details", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: "image", id }),
+    });
+    if (typeof editing === "number") loadProductDetails(editing);
+  };
+
+  const handleVariantImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    target: "new" | "edit"
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingVariantImg(true);
+    try {
+      const url = await uploadFile(file);
+      if (url) {
+        if (target === "new") setNewVariant((p) => ({ ...p, image_url: url }));
+        else setEditVariantForm((p) => ({ ...p, image_url: url }));
+      }
+    } catch { alert("Upload failed"); }
+    finally { setUploadingVariantImg(false); e.target.value = ""; }
+  };
+
+  const addVariant = async () => {
+    if (!newVariant.name || typeof editing !== "number") return;
+    await fetch("/api/admin/product-details", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: "variant", product_id: editing, ...newVariant }),
+    });
+    setNewVariant({ name: "", swatch: "", image_url: "" });
+    loadProductDetails(editing);
+  };
+
+  const saveVariant = async (id: number) => {
+    await fetch("/api/admin/product-details", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: "variant", id, ...editVariantForm }),
+    });
+    setEditingVariant(null);
+    if (typeof editing === "number") loadProductDetails(editing);
+  };
+
+  const deleteVariant = async (id: number) => {
+    if (!confirm("Delete this variant?")) return;
+    await fetch("/api/admin/product-details", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: "variant", id }),
+    });
+    if (typeof editing === "number") loadProductDetails(editing);
+  };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -700,10 +839,14 @@ export function AdminProducts() {
   }, []);
 
   useEffect(() => { loadProducts(); }, [loadProducts]);
+  useEffect(() => {
+    fetch("/api/admin/mailing-lists").then((r) => r.json()).then((d) => { if (Array.isArray(d)) setMailingLists(d); }).catch(() => {});
+  }, []);
 
   const startNew = () => {
     setForm(EMPTY_PRODUCT);
     setEditing("new");
+    setTimeout(() => formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
   };
 
   const startEdit = (p: Product) => {
@@ -720,13 +863,27 @@ export function AdminProducts() {
       badge: p.badge || "",
       sort_order: p.sort_order,
       active: p.active,
+      coming_soon: p.coming_soon || false,
+      preorder_enabled: p.preorder_enabled || false,
+      preorder_deposit: p.preorder_deposit || "",
+      release_date: p.release_date || "",
+      preorder_list_id: p.preorder_list_id || 0,
+      booking_mode: p.booking_mode || "",
+      recurrence_anchor: p.recurrence_anchor || "",
+      recurrence_interval_months: p.recurrence_interval_months || 2,
     });
     setEditing(p.id);
+    loadProductDetails(p.id);
+    setTimeout(() => formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
   };
 
   const cancelEdit = () => {
     setEditing(null);
     setForm(EMPTY_PRODUCT);
+    setGalleryImages([]);
+    setVariants([]);
+    setNewVariant({ name: "", swatch: "", image_url: "" });
+    setEditingVariant(null);
   };
 
   const saveProduct = async () => {
@@ -786,7 +943,7 @@ export function AdminProducts() {
       </div>
 
       {editing !== null && (
-        <div className="adm-form-card">
+        <div className="adm-form-card" ref={formRef}>
           <h3 className="adm-form-title">
             {editing === "new" ? "New product" : "Edit product"}
           </h3>
@@ -862,7 +1019,7 @@ export function AdminProducts() {
               Product image
               <input
                 type="file"
-                accept="image/jpeg,image/png,image/webp,image/avif"
+                accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,.heic,.heif"
                 onChange={handleImageUpload}
                 disabled={uploading}
               />
@@ -910,7 +1067,205 @@ export function AdminProducts() {
               />
               Active (visible in shop)
             </label>
+            <label className="adm-form-check">
+              <input
+                type="checkbox"
+                checked={form.coming_soon}
+                onChange={(e) => setForm({ ...form, coming_soon: e.target.checked, preorder_enabled: e.target.checked ? form.preorder_enabled : false })}
+              />
+              Coming soon
+            </label>
+            {form.coming_soon && (
+              <>
+                <label className="adm-form-check">
+                  <input
+                    type="checkbox"
+                    checked={form.preorder_enabled}
+                    onChange={(e) => setForm({ ...form, preorder_enabled: e.target.checked })}
+                  />
+                  Pre-order enabled
+                </label>
+                <label>
+                  Pre-order deposit
+                  <input
+                    value={form.preorder_deposit}
+                    onChange={(e) => setForm({ ...form, preorder_deposit: e.target.value })}
+                    placeholder="e.g. £10"
+                  />
+                </label>
+                <label>
+                  Release date
+                  <input
+                    type="date"
+                    value={form.release_date}
+                    onChange={(e) => setForm({ ...form, release_date: e.target.value })}
+                  />
+                </label>
+                <label>
+                  Mailing list (auto-add on interest/pre-order)
+                  <select
+                    value={form.preorder_list_id || 0}
+                    onChange={(e) => setForm({ ...form, preorder_list_id: parseInt(e.target.value) || 0 })}
+                  >
+                    <option value={0}>None</option>
+                    {mailingLists.map((l) => (
+                      <option key={l.id} value={l.id}>{l.name}</option>
+                    ))}
+                  </select>
+                </label>
+              </>
+            )}
+            <label>
+              Booking mode
+              <select value={form.booking_mode} onChange={(e) => setForm({ ...form, booking_mode: e.target.value })}>
+                <option value="">None (not bookable)</option>
+                <option value="recurring">Recurring cohorts</option>
+                <option value="dated">One-off dates</option>
+                <option value="request">Open request</option>
+              </select>
+            </label>
+            {form.booking_mode === "recurring" && (
+              <>
+                <label>
+                  First cohort start date
+                  <input type="date" value={form.recurrence_anchor} onChange={(e) => setForm({ ...form, recurrence_anchor: e.target.value })} />
+                </label>
+                <label>
+                  Interval (months)
+                  <input type="number" min={1} max={12} value={form.recurrence_interval_months} onChange={(e) => setForm({ ...form, recurrence_interval_months: parseInt(e.target.value) || 2 })} />
+                </label>
+                {form.recurrence_anchor && (
+                  <div className="adm-recurrence-preview">
+                    <span className="adm-detail-label">Next 3 cohorts</span>
+                    <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                      {(() => {
+                        const dates: string[] = [];
+                        const now = new Date();
+                        const anchor = new Date(form.recurrence_anchor + "T00:00:00");
+                        let current = new Date(anchor);
+                        while (current <= now) {
+                          current = new Date(current);
+                          current.setMonth(current.getMonth() + (form.recurrence_interval_months || 2));
+                        }
+                        for (let i = 0; i < 3; i++) {
+                          dates.push(current.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }));
+                          const next = new Date(current);
+                          next.setMonth(next.getMonth() + (form.recurrence_interval_months || 2));
+                          current = next;
+                        }
+                        return dates.map((d, i) => <span key={i} className="adm-badge adm-badge-open">{d}</span>);
+                      })()}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </div>
+
+          {typeof editing === "number" && (
+            <>
+              {/* Gallery images */}
+              <div style={{ marginTop: 20, borderTop: "1px solid var(--line, #eee)", paddingTop: 16 }}>
+                <h4 style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 600 }}>Gallery images</h4>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                  {galleryImages.map((img) => (
+                    <div key={img.id} style={{ position: "relative" }}>
+                      <img
+                        src={img.image_url}
+                        alt=""
+                        style={{ width: 70, height: 70, objectFit: "cover", borderRadius: 6 }}
+                      />
+                      <button
+                        type="button"
+                        className="adm-btn-sm adm-btn-danger"
+                        style={{ position: "absolute", top: -6, right: -6, padding: "2px 5px", fontSize: 10 }}
+                        onClick={() => removeGalleryImage(img.id)}
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  ))}
+                  <label style={{ cursor: "pointer" }}>
+                    <span className="adm-btn-sm" style={{ display: "inline-block" }}>
+                      {uploadingGallery ? "Uploading..." : "+ Add"}
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,.heic,.heif"
+                      onChange={handleGalleryUpload}
+                      disabled={uploadingGallery}
+                      style={{ display: "none" }}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* Variants */}
+              <div style={{ marginTop: 20, borderTop: "1px solid var(--line, #eee)", paddingTop: 16 }}>
+                <h4 style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 600 }}>Variants</h4>
+                {variants.map((v) => (
+                  <div key={v.id} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                    {editingVariant === v.id ? (
+                      <>
+                        <input
+                          value={editVariantForm.name}
+                          onChange={(e) => setEditVariantForm({ ...editVariantForm, name: e.target.value })}
+                          placeholder="Name"
+                          style={{ width: 100 }}
+                        />
+                        <input
+                          value={editVariantForm.swatch}
+                          onChange={(e) => setEditVariantForm({ ...editVariantForm, swatch: e.target.value })}
+                          placeholder="#color"
+                          style={{ width: 80 }}
+                        />
+                        {editVariantForm.image_url && (
+                          <img src={editVariantForm.image_url} alt="" style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 4 }} />
+                        )}
+                        <label style={{ cursor: "pointer" }}>
+                          <span className="adm-btn-sm">{uploadingVariantImg ? "..." : "Photo"}</span>
+                          <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,.heic,.heif" onChange={(e) => handleVariantImageUpload(e, "edit")} style={{ display: "none" }} />
+                        </label>
+                        <button className="adm-btn-sm adm-btn-primary" onClick={() => saveVariant(v.id)}>Save</button>
+                        <button className="adm-btn-sm" onClick={() => setEditingVariant(null)}>Cancel</button>
+                      </>
+                    ) : (
+                      <>
+                        <div style={{ width: 20, height: 20, borderRadius: "50%", background: v.swatch || "#ccc", flexShrink: 0, border: "1px solid rgba(0,0,0,0.1)" }} />
+                        <span style={{ fontWeight: 500, fontSize: 13 }}>{v.name}</span>
+                        {v.image_url && <img src={v.image_url} alt="" style={{ width: 28, height: 28, objectFit: "cover", borderRadius: 4 }} />}
+                        <button className="adm-btn-sm" onClick={() => { setEditingVariant(v.id); setEditVariantForm({ name: v.name, swatch: v.swatch || "", image_url: v.image_url || "" }); }}>Edit</button>
+                        <button className="adm-btn-sm adm-btn-danger" onClick={() => deleteVariant(v.id)}>Delete</button>
+                      </>
+                    )}
+                  </div>
+                ))}
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
+                  <input
+                    value={newVariant.name}
+                    onChange={(e) => setNewVariant({ ...newVariant, name: e.target.value })}
+                    placeholder="Variant name"
+                    style={{ width: 120 }}
+                  />
+                  <input
+                    value={newVariant.swatch}
+                    onChange={(e) => setNewVariant({ ...newVariant, swatch: e.target.value })}
+                    placeholder="#color"
+                    style={{ width: 80 }}
+                  />
+                  {newVariant.image_url && (
+                    <img src={newVariant.image_url} alt="" style={{ width: 28, height: 28, objectFit: "cover", borderRadius: 4 }} />
+                  )}
+                  <label style={{ cursor: "pointer" }}>
+                    <span className="adm-btn-sm">{uploadingVariantImg ? "..." : "Photo"}</span>
+                    <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,.heic,.heif" onChange={(e) => handleVariantImageUpload(e, "new")} style={{ display: "none" }} />
+                  </label>
+                  <button className="adm-btn-sm adm-btn-primary" onClick={addVariant} disabled={!newVariant.name}>+ Add</button>
+                </div>
+              </div>
+            </>
+          )}
+
           <div className="adm-form-actions">
             <button
               className="adm-btn adm-btn-primary"
@@ -944,10 +1299,18 @@ export function AdminProducts() {
             <tr key={p.id} className={!p.active ? "adm-row-inactive" : ""}>
               <td className="adm-muted">{p.id}</td>
               <td>
-                <div
-                  className="adm-swatch"
-                  style={{ background: p.swatch || "#ccc" }}
-                />
+                {p.image_url ? (
+                  <img
+                    src={p.image_url}
+                    alt=""
+                    style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 6 }}
+                  />
+                ) : (
+                  <div
+                    className="adm-swatch"
+                    style={{ background: p.swatch || "#ccc" }}
+                  />
+                )}
               </td>
               <td>
                 <div>{p.brand} — {p.name}</div>
@@ -2435,6 +2798,333 @@ export function AdminCourses() {
             </button>
           </div>
         </>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  AdminMessages — threaded inbox                                     */
+/* ------------------------------------------------------------------ */
+
+interface Conversation {
+  id: number;
+  subject: string;
+  category: string;
+  status: string;
+  user_id: string | null;
+  user_name: string;
+  user_email: string;
+  product_id: number | null;
+  created_at: string;
+  updated_at: string;
+  latest_message: { id: number; body: string; sender_type: string; read_at: string | null; created_at: string } | null;
+  unread_count: number;
+}
+
+interface Message {
+  id: number;
+  conversation_id: number;
+  sender_type: string;
+  sender_id: string | null;
+  body: string;
+  metadata: Record<string, unknown> | null;
+  read_at: string | null;
+  created_at: string;
+}
+
+const MSG_FILTERS = [
+  { id: "all", label: "All" },
+  { id: "unread", label: "Unread" },
+  { id: "contact", label: "Contact" },
+  { id: "order", label: "Orders" },
+  { id: "booking", label: "Bookings" },
+  { id: "notify", label: "Interest" },
+];
+
+const CAT_BADGE: Record<string, { label: string; color: string }> = {
+  "contact-employer": { label: "Employer", color: "var(--teal)" },
+  "contact-cowork": { label: "Co-working", color: "var(--sage)" },
+  "contact-teacher": { label: "Teacher", color: "var(--sun)" },
+  "contact-press": { label: "Press", color: "var(--rose)" },
+  "contact-member": { label: "Member", color: "var(--lavender, #b39ddb)" },
+  "contact-other": { label: "Other", color: "var(--stone)" },
+  booking: { label: "Booking", color: "var(--teal)" },
+  order: { label: "Order", color: "var(--sun)" },
+  notify: { label: "Notify", color: "var(--sage)" },
+  admin: { label: "Admin", color: "var(--stone)" },
+};
+
+export function AdminMessages() {
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
+  const [activeId, setActiveId] = useState<number | null>(null);
+  const [thread, setThread] = useState<Message[]>([]);
+  const [activeConvo, setActiveConvo] = useState<Conversation | null>(null);
+  const [reply, setReply] = useState("");
+  const [sending, setSending] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // New message state
+  const [showNew, setShowNew] = useState(false);
+  const [newUserId, setNewUserId] = useState("");
+  const [newUserName, setNewUserName] = useState("");
+  const [newUserEmail, setNewUserEmail] = useState("");
+  const [newSubject, setNewSubject] = useState("");
+  const [newBody, setNewBody] = useState("");
+  const [userSearch, setUserSearch] = useState("");
+  const [userResults, setUserResults] = useState<{ id: string; email: string; name: string }[]>([]);
+
+  const fetchConversations = useCallback(async () => {
+    const res = await fetch(`/api/admin/messages?filter=${filter}`);
+    if (res.ok) {
+      const data = await res.json();
+      setConversations(data.conversations);
+    }
+    setLoading(false);
+  }, [filter]);
+
+  useEffect(() => { fetchConversations(); }, [fetchConversations]);
+
+  async function openThread(id: number) {
+    setActiveId(id);
+    const res = await fetch(`/api/admin/messages/${id}`);
+    if (res.ok) {
+      const data = await res.json();
+      setThread(data.messages);
+      setActiveConvo(data.conversation);
+      // Update local unread
+      setConversations(prev => prev.map(c => c.id === id ? { ...c, unread_count: 0 } : c));
+    }
+  }
+
+  async function sendReply() {
+    if (!reply.trim() || !activeId) return;
+    setSending(true);
+    const res = await fetch("/api/admin/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversation_id: activeId, body: reply }),
+    });
+    if (res.ok) {
+      setReply("");
+      openThread(activeId);
+      fetchConversations();
+    }
+    setSending(false);
+  }
+
+  async function updateStatus(id: number, status: string) {
+    await fetch("/api/admin/messages", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversation_id: id, status }),
+    });
+    fetchConversations();
+    if (activeConvo && activeConvo.id === id) {
+      setActiveConvo({ ...activeConvo, status });
+    }
+  }
+
+  async function searchUsers(q: string) {
+    setUserSearch(q);
+    if (q.length < 2) { setUserResults([]); return; }
+    const res = await fetch(`/api/admin/users?search=${encodeURIComponent(q)}`);
+    if (res.ok) {
+      const data = await res.json();
+      setUserResults((data.users || data).slice(0, 8).map((u: { id: string; email: string; name: string }) => ({ id: u.id, email: u.email, name: u.name })));
+    }
+  }
+
+  async function sendNewMessage() {
+    if (!newUserId || !newSubject.trim() || !newBody.trim()) return;
+    setSending(true);
+    const res = await fetch("/api/admin/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_id: newUserId,
+        user_name: newUserName,
+        user_email: newUserEmail,
+        subject: newSubject,
+        body: newBody,
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setShowNew(false);
+      setNewUserId("");
+      setNewUserName("");
+      setNewUserEmail("");
+      setNewSubject("");
+      setNewBody("");
+      setUserSearch("");
+      fetchConversations();
+      if (data.conversation_id) openThread(data.conversation_id);
+    }
+    setSending(false);
+  }
+
+  const filtered = conversations.filter(c => {
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return c.user_name.toLowerCase().includes(q) || c.user_email.toLowerCase().includes(q) || c.subject.toLowerCase().includes(q);
+  });
+
+  if (loading) return <div className="adm-loading">Loading messages...</div>;
+
+  return (
+    <div className="adm-messages">
+      <div className="adm-messages-head">
+        <h1>Messages</h1>
+        <button className="adm-btn adm-btn-primary" onClick={() => setShowNew(true)}>
+          + New message
+        </button>
+      </div>
+
+      <div className="adm-messages-layout">
+        {/* Left panel -- conversation list */}
+        <div className="adm-msg-list">
+          <div className="adm-msg-filters">
+            {MSG_FILTERS.map(f => (
+              <button key={f.id} className={"adm-msg-filter" + (filter === f.id ? " active" : "")} onClick={() => setFilter(f.id)}>
+                {f.label}
+              </button>
+            ))}
+          </div>
+          <input
+            className="adm-msg-search"
+            placeholder="Search name, email, subject..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          <div className="adm-msg-items">
+            {filtered.length === 0 && <div className="adm-empty">No conversations</div>}
+            {filtered.map(c => {
+              const badge = CAT_BADGE[c.category];
+              return (
+                <div key={c.id} className={"adm-msg-item" + (activeId === c.id ? " active" : "") + (c.unread_count > 0 ? " unread" : "")} onClick={() => openThread(c.id)}>
+                  <div className="adm-msg-item-top">
+                    <span className="adm-msg-name">{c.user_name}</span>
+                    <span className="adm-msg-time">{fmtDateTime(c.updated_at)}</span>
+                  </div>
+                  <div className="adm-msg-subject">{c.subject}</div>
+                  <div className="adm-msg-item-bot">
+                    <span className="adm-msg-preview">
+                      {c.latest_message ? c.latest_message.body.slice(0, 80) : ""}
+                    </span>
+                    <span className="adm-msg-cat-badge" style={badge ? { background: badge.color } : undefined}>
+                      {badge ? badge.label : c.category}
+                    </span>
+                  </div>
+                  {c.unread_count > 0 && <span className="adm-msg-unread-dot" />}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Right panel -- thread view */}
+        <div className="adm-msg-thread">
+          {!activeConvo ? (
+            <div className="adm-msg-empty">
+              <Icon name="mail" size={32} />
+              <p>Select a conversation</p>
+            </div>
+          ) : (
+            <>
+              <div className="adm-msg-thread-head">
+                <div>
+                  <h3>{activeConvo.subject}</h3>
+                  <span className="adm-msg-thread-meta">{activeConvo.user_name} &middot; {activeConvo.user_email}</span>
+                </div>
+                <div className="adm-msg-thread-actions">
+                  {activeConvo.status !== "archived" && (
+                    <button className="adm-btn adm-btn-sm" onClick={() => updateStatus(activeConvo.id, "archived")}>Archive</button>
+                  )}
+                  {activeConvo.status !== "closed" && (
+                    <button className="adm-btn adm-btn-sm" onClick={() => updateStatus(activeConvo.id, "closed")}>Close</button>
+                  )}
+                  {(activeConvo.status === "archived" || activeConvo.status === "closed") && (
+                    <button className="adm-btn adm-btn-sm" onClick={() => updateStatus(activeConvo.id, "open")}>Reopen</button>
+                  )}
+                </div>
+              </div>
+              <div className="adm-msg-bubbles">
+                {thread.map(m => (
+                  <div key={m.id} className={"adm-msg-bubble " + m.sender_type}>
+                    <div className="adm-msg-bubble-label">
+                      {m.sender_type === "user" ? activeConvo.user_name : m.sender_type === "system" ? "System" : "Admin"}
+                    </div>
+                    <div className="adm-msg-bubble-body">{m.body}</div>
+                    <div className="adm-msg-bubble-time">{fmtDateTime(m.created_at)}</div>
+                  </div>
+                ))}
+              </div>
+              {activeConvo.status !== "closed" && (
+                <div className="adm-msg-reply">
+                  <textarea
+                    placeholder="Write a reply..."
+                    value={reply}
+                    onChange={e => setReply(e.target.value)}
+                    rows={3}
+                    onKeyDown={e => { if (e.key === "Enter" && e.metaKey) sendReply(); }}
+                  />
+                  <button className="adm-btn adm-btn-primary" onClick={sendReply} disabled={sending || !reply.trim()}>
+                    {sending ? "Sending..." : "Send"}
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* New message modal */}
+      {showNew && (
+        <div className="adm-modal-overlay" onClick={() => setShowNew(false)}>
+          <div className="adm-modal" onClick={e => e.stopPropagation()}>
+            <h3>New message</h3>
+            <div className="adm-field">
+              <label>To (search user)</label>
+              <input
+                value={userSearch}
+                onChange={e => searchUsers(e.target.value)}
+                placeholder="Type name or email..."
+              />
+              {userResults.length > 0 && (
+                <div className="adm-user-results">
+                  {userResults.map(u => (
+                    <div key={u.id} className="adm-user-result" onClick={() => {
+                      setNewUserId(u.id);
+                      setNewUserName(u.name);
+                      setNewUserEmail(u.email);
+                      setUserSearch(u.name || u.email);
+                      setUserResults([]);
+                    }}>
+                      {u.name} — {u.email}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="adm-field">
+              <label>Subject</label>
+              <input value={newSubject} onChange={e => setNewSubject(e.target.value)} placeholder="Subject" />
+            </div>
+            <div className="adm-field">
+              <label>Message</label>
+              <textarea rows={5} value={newBody} onChange={e => setNewBody(e.target.value)} placeholder="Write your message..." />
+            </div>
+            <div className="adm-modal-foot">
+              <button className="adm-btn" onClick={() => setShowNew(false)}>Cancel</button>
+              <button className="adm-btn adm-btn-primary" onClick={sendNewMessage} disabled={sending || !newUserId || !newSubject.trim() || !newBody.trim()}>
+                {sending ? "Sending..." : "Send message"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
