@@ -3281,11 +3281,37 @@ button.hero-eyebrow:hover { background: rgba(8,131,149,0.12); transform: transla
   max-width: 880px;
   margin: 0 auto;
 }
-.dash-welcome {
+/* Dashboard header */
+.dash-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 20px;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
+}
+.dash-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.dash-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dash-signout-btn {
+  background: none;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.dash-signout-btn:hover {
+  border-color: var(--ink-3);
+  color: var(--ink);
 }
 .dash-avatar {
   width: 56px;
@@ -3306,41 +3332,146 @@ button.hero-eyebrow:hover { background: rgba(8,131,149,0.12); transform: transla
   color: var(--ink-3);
   margin: 4px 0 0;
 }
-.dash-grid {
+
+/* Dashboard stats row */
+.dash-stats {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  margin-bottom: 40px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 36px;
 }
-.dash-card {
+.dash-stat {
   background: var(--white);
-  border-radius: 16px;
-  padding: 32px 28px;
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
   box-shadow: 0 2px 12px rgba(31, 26, 27, 0.04);
+  transition: box-shadow 0.15s, transform 0.15s;
 }
-.dash-card-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--cream);
+.dash-stat:hover {
+  box-shadow: 0 4px 20px rgba(31, 26, 27, 0.08);
+  transform: translateY(-2px);
+}
+.dash-stat-icon {
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+.dash-stat-value {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.dash-stat-label {
+  font-size: 12px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Dashboard sections */
+.dash-section {
+  margin-bottom: 32px;
+}
+
+/* Dashboard two-column layout */
+.dash-columns {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 32px;
+  align-items: start;
+}
+.dash-col-main { min-width: 0; }
+.dash-col-side {
+  position: sticky;
+  top: 100px;
+}
+
+/* Quick links */
+.dash-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.dash-link-card {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: var(--teal);
-  margin-bottom: 16px;
+  gap: 12px;
+  background: var(--white);
+  border-radius: 12px;
+  padding: 14px 18px;
+  text-decoration: none;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(31, 26, 27, 0.03);
+  transition: box-shadow 0.15s, transform 0.15s;
 }
-.dash-card h3 {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 20px;
-  margin: 0 0 8px;
+.dash-link-card:hover {
+  box-shadow: 0 4px 16px rgba(31, 26, 27, 0.07);
+  transform: translateX(2px);
 }
-.dash-card p {
+.dash-link-card svg:first-child { color: var(--teal); }
+.dash-link-card span { flex: 1; }
+.dash-link-card svg:last-child { color: var(--ink-3); }
+
+/* Empty state */
+.dash-empty {
   font-size: 14px;
   color: var(--ink-3);
-  margin: 0 0 16px;
-  line-height: 1.5;
+  padding: 20px 0;
 }
+.dash-empty a {
+  color: var(--teal);
+  text-decoration: underline;
+}
+
+/* Past bookings / purchases collapsible */
+.dash-past-details {
+  background: var(--white);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(31, 26, 27, 0.04);
+  margin-bottom: 24px;
+}
+.dash-summary {
+  cursor: pointer;
+  padding: 16px 24px;
+  list-style: none;
+  user-select: none;
+}
+.dash-summary::-webkit-details-marker { display: none; }
+.dash-summary::marker { display: none; }
+
+/* Course list */
+.dash-course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dash-course-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--white);
+  border-radius: 12px;
+  padding: 16px 20px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 8px rgba(31, 26, 27, 0.03);
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.dash-course-row:hover {
+  box-shadow: 0 4px 16px rgba(31, 26, 27, 0.07);
+  transform: translateX(2px);
+}
+.dash-course-row svg { color: var(--ink-3); flex-shrink: 0; }
+.dash-course-info { flex: 1; min-width: 0; }
+.dash-course-name { font-weight: 500; font-size: 14px; margin-bottom: 6px; }
 .btn-outline {
   border: 1.5px solid var(--line);
   background: var(--white);
@@ -3408,36 +3539,11 @@ button.hero-eyebrow:hover { background: rgba(8,131,149,0.12); transform: transla
 }
 .dash-purchase-amount { font-weight: 500; color: var(--teal); }
 .dash-purchase-date { color: var(--ink-3); font-size: 13px; }
-.dash-signout {
-  margin-top: 8px;
-}
-/* Dashboard card as link */
-.dash-card-link {
-  text-decoration: none;
-  color: inherit;
-  position: relative;
-  transition: box-shadow 0.15s, transform 0.15s;
-  cursor: pointer;
-  display: block;
-}
-.dash-card-link:hover {
-  box-shadow: 0 4px 20px rgba(31, 26, 27, 0.08);
-  transform: translateY(-2px);
-}
-.dash-card-arrow {
-  position: absolute;
-  top: 28px;
-  right: 24px;
-  color: var(--ink-3);
-  transition: color 0.15s, transform 0.15s;
-}
-.dash-card-link:hover .dash-card-arrow {
-  color: var(--teal);
-  transform: translateX(2px);
-}
-
-@media (max-width: 640px) {
-  .dash-grid { grid-template-columns: 1fr; }
+@media (max-width: 768px) {
+  .dash-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .dash-stats { grid-template-columns: repeat(2, 1fr); }
+  .dash-columns { grid-template-columns: 1fr; }
+  .dash-col-side { position: static; }
   .dash-h1 { font-size: 26px; }
   .dash-main { padding: 48px 16px 40px; }
 }
