@@ -991,20 +991,16 @@ export function ShopClient({ products, ownedCourseIds = [] }: { products: Produc
     { id: "workshop", label: "Workshops" },
     { id: "intensive", label: "Cohorts & intensives" },
     { id: "retreat", label: "Retreats" },
-    { id: "journal", label: "Journals & prints" },
-    { id: "kit", label: "Active wear" },
   ];
 
   const filtered = cat === "all" ? products : products.filter((p) => p.category === cat);
 
   const catMeta: Record<string, CatMeta> = {
-    all: { eye: "Everything", title: <>Classes, Courses, <em>Retreats.</em></>, sub: "Workshops, intensives, retreats and the quiet things we keep on our shelf." },
+    all: { eye: "Everything", title: <>Classes, Courses, <em>Retreats.</em></>, sub: "" },
     course: { eye: "Courses", title: <>Move with intention. <em>Learn at your pace.</em></>, sub: "Self-paced courses for the work beneath the work. Deepen your practice, on your own terms." },
     intensive: { eye: "Cohorts & intensives", title: <>Breathe together. <em>Grow together.</em></>, sub: "Live cohorts that ask a little more of you. Show up, on purpose." },
     workshop: { eye: "Workshops", title: <>Two a month. <em>Everything on rotation.</em></>, sub: "Single-session deep dives. Breath, alignment, restorative flow. For when a six-week cohort is too much and a class isn't enough." },
     retreat: { eye: "Retreats", title: <>Your softest era <em>starts on the mat.</em></>, sub: "A week somewhere else. No phones after dinner. Come back a little more yours." },
-    journal: { eye: "Journals & prints", title: <>Put it on paper. <em>Let it go.</em></>, sub: "Paper things, printed slowly. For the pages that don't belong on a screen." },
-    kit: { eye: "Active wear", title: <>Dress the practice. <em>Own the feeling.</em></>, sub: "What to wear on the mat, and to the coffee after." },
   };
   const head = catMeta[cat];
 
@@ -1014,7 +1010,6 @@ export function ShopClient({ products, ownedCourseIds = [] }: { products: Produc
       case "workshop": return "Book a seat";
       case "intensive": return "Join cohort";
       case "retreat": return "Book a spot";
-      case "journal": return "Add to basket";
       default: return "Buy";
     }
   };
@@ -1041,7 +1036,7 @@ export function ShopClient({ products, ownedCourseIds = [] }: { products: Produc
           ))}
           <div className="sf-right">
             <Icon name="search" size={14} />
-            <input placeholder="Search — 'retreat', 'journal', 'breath'…" />
+            <input placeholder="Search — 'retreat', 'workshop', 'breath'…" />
           </div>
         </div>
       </section>
