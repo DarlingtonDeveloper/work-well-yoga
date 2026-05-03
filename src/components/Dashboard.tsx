@@ -3,8 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { Nav } from "./nav";
-import { MiniFoot } from "./footer";
 import { Icon } from "./icons";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
@@ -132,7 +130,6 @@ export function DashboardShell({ user, purchases, bookings, enrollments, wishlis
 
   return (
     <>
-      <Nav />
       <section className="dash-main">
         <div className="dash-inner">
 
@@ -411,7 +408,6 @@ export function DashboardShell({ user, purchases, bookings, enrollments, wishlis
 
         </div>
       </section>
-      <MiniFoot />
     </>
   );
 }
