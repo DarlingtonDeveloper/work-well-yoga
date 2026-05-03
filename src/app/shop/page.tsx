@@ -7,6 +7,7 @@ export default async function ShopPage() {
     .from("products")
     .select("*, product_images(*), product_variants(*)")
     .eq("active", true)
+    .in("category", ["course", "workshop", "intensive", "retreat"])
     .order("sort_order", { ascending: true })
     .order("sort_order", { referencedTable: "product_images", ascending: true })
     .order("sort_order", { referencedTable: "product_variants", ascending: true });
