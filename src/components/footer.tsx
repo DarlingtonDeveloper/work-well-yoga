@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Icon } from "./icons";
 
 export function FloatingContact() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin")) return null;
   return (
     <div className="floating" role="complementary" aria-label="Contact">
       <a className="f-item" href="tel:+447803340153">
@@ -30,6 +33,8 @@ export function FloatingContact() {
 }
 
 export function MiniFoot() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin")) return null;
   return (
     <div className="mini-foot">
       <div className="f-logo">
