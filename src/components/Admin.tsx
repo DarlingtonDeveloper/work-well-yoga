@@ -265,7 +265,7 @@ export function AdminShell({
   const links = [
     { href: "/admin", label: "Overview", icon: "spark" as const },
     { href: "/admin/orders", label: "Orders", icon: "calendar" as const },
-    { href: "/admin/users", label: "Users", icon: "user" as const },
+    { href: "/admin/users", label: "Users", icon: "users" as const },
     { href: "/admin/products", label: "Products", icon: "heart" as const },
     { href: "/admin/courses", label: "Courses", icon: "book" as const },
     { href: "/admin/events", label: "Events", icon: "clock" as const },
