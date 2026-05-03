@@ -4306,6 +4306,8 @@ button.hero-eyebrow:hover { background: rgba(8,131,149,0.12); transform: transla
   margin-left: 220px;
   padding: 32px 40px 60px;
   min-height: 100vh;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .adm-h1 {
@@ -4314,11 +4316,15 @@ button.hero-eyebrow:hover { background: rgba(8,131,149,0.12); transform: transla
   font-weight: 500;
   color: var(--ink);
   margin: 0 0 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .adm-h1-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   margin-bottom: 24px;
 }
 .adm-h1-row .adm-h1 { margin: 0; }

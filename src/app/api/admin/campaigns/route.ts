@@ -10,7 +10,7 @@ export async function GET() {
   const sb = getAdminSupabase();
 
   const { data: campaigns, error } = await sb
-    .from("campaigns")
+    .from("email_campaigns")
     .select("*, mailing_lists(id, name), events(id, title)")
     .order("created_at", { ascending: false });
 
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
   const body = await request.json();
 
   const { data, error } = await sb
-    .from("campaigns")
+    .from("email_campaigns")
     .insert({
       ...body,
       status: "draft",
@@ -54,7 +54,7 @@ export async function PUT(request: Request) {
     // Mark campaign as sent
     // TODO: Implement actual email sending via Resend/SendGrid
     const { data: campaign } = await sb
-      .from("campaigns")
+      .from("email_campaigns")
       .select("list_id")
       .eq("id", id)
       .single();
@@ -70,7 +70,7 @@ export async function PUT(request: Request) {
     }
 
     const { data, error } = await sb
-      .from("campaigns")
+      .from("email_campaigns")
       .update({
         status: "sent",
         sent_at: new Date().toISOString(),
@@ -85,7 +85,7 @@ export async function PUT(request: Request) {
   }
 
   const { data, error } = await sb
-    .from("campaigns")
+    .from("email_campaigns")
     .update(updates)
     .eq("id", id)
     .select()
@@ -104,7 +104,7 @@ export async function DELETE(request: Request) {
   const sb = getAdminSupabase();
   const { id } = await request.json();
 
-  const { error } = await sb.from("campaigns").delete().eq("id", id);
+  const { error } = await sb.from("email_campaigns").delete().eq("id", id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
