@@ -15,6 +15,7 @@ const items = [
 
 export function Nav() {
   const pathname = usePathname();
+  if (pathname.startsWith("/admin")) return null;
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
