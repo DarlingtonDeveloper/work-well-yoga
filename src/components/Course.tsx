@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Nav } from "./nav";
-import { MiniFoot } from "./footer";
 import { Icon } from "./icons";
 import Link from "next/link";
 
@@ -93,7 +91,6 @@ export function CourseShell({ product, modules, progressIds: initialProgress }: 
   if (activeLesson) {
     return (
       <>
-        <Nav />
         <section className="crs-main">
           <div className="crs-inner">
             <button className="crs-back" onClick={closeLesson}>
@@ -169,14 +166,12 @@ export function CourseShell({ product, modules, progressIds: initialProgress }: 
             </div>
           </div>
         </section>
-        <MiniFoot />
       </>
     );
   }
 
   return (
     <>
-      <Nav />
       <section className="crs-main">
         <div className="crs-inner">
           <Link href="/dashboard" className="crs-back">
@@ -255,7 +250,6 @@ export function CourseShell({ product, modules, progressIds: initialProgress }: 
           </div>
         </div>
       </section>
-      <MiniFoot />
     </>
   );
 }

@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { Nav } from "./nav";
-import { MiniFoot } from "./footer";
 import { Icon } from "./icons";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
@@ -132,7 +130,6 @@ export function AccountShell({ user, profile: initialProfile, subscriptions: ini
 
   return (
     <>
-      <Nav />
       <section className="acct-main">
         <div className="acct-inner">
           <Link href="/dashboard" className="acct-back">
@@ -311,7 +308,6 @@ export function AccountShell({ user, profile: initialProfile, subscriptions: ini
           </div>
         </div>
       </section>
-      <MiniFoot />
     </>
   );
 }

@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Nav } from "./nav";
-import { MiniFoot } from "./footer";
 import { Icon } from "./icons";
 import Link from "next/link";
 
@@ -120,11 +118,9 @@ export function PracticeShell() {
   if (loading) {
     return (
       <>
-        <Nav />
         <section className="prac-main">
           <div className="prac-inner"><p style={{ textAlign: "center", color: "var(--ink-3)", padding: "48px 0" }}>Loading...</p></div>
         </section>
-        <MiniFoot />
       </>
     );
   }
@@ -146,7 +142,6 @@ export function PracticeShell() {
 
   return (
     <>
-      <Nav />
       <section className="prac-main">
         <div className="prac-inner">
           <Link href="/dashboard" className="prac-back">
@@ -316,7 +311,6 @@ export function PracticeShell() {
           </div>
         </div>
       </section>
-      <MiniFoot />
     </>
   );
 }
