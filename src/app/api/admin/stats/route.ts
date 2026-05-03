@@ -48,12 +48,19 @@ export async function GET() {
   const ordersMonth = completed.filter((p) => new Date(p.created_at) >= monthAgo).length;
   const ordersAllTime = completed.length;
 
-  // Revenue by category
-  const revenueByCategory: Record<string, number> = {};
+  // Revenue by category (array format the component expects)
+  const catMap: Record<string, { revenue: number; count: number }> = {};
   completed.forEach((p) => {
     const cat = p.category || "other";
-    revenueByCategory[cat] = (revenueByCategory[cat] || 0) + (p.amount || 0);
+    if (!catMap[cat]) catMap[cat] = { revenue: 0, count: 0 };
+    catMap[cat].revenue += p.amount || 0;
+    catMap[cat].count += 1;
   });
+  const byCategory = Object.entries(catMap).map(([category, v]) => ({
+    category,
+    revenue: v.revenue,
+    count: v.count,
+  }));
 
   // Total users
   const { data: usersData } = await sb.auth.admin.listUsers({ perPage: 1000 });
@@ -63,20 +70,14 @@ export async function GET() {
   const recentOrders = allPurchases.slice(0, 15);
 
   return NextResponse.json({
-    revenue: {
-      today: revenueToday,
-      week: revenueWeek,
-      month: revenueMonth,
-      allTime: revenueAllTime,
-    },
-    orders: {
-      today: ordersToday,
-      week: ordersWeek,
-      month: ordersMonth,
-      allTime: ordersAllTime,
-    },
-    revenueByCategory,
+    revenueToday,
+    revenueWeek,
+    revenueMonth,
+    revenueAllTime,
+    ordersMonth,
+    ordersAllTime,
     totalUsers,
+    byCategory,
     recentOrders,
   });
 }
