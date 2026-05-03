@@ -214,7 +214,7 @@ export function DashboardShell({ user, purchases, bookings, enrollments, wishlis
                           {c.messages.map(m => (
                             <div key={m.id} className={"dash-msg-bubble " + m.sender_type}>
                               <div className="dash-msg-bubble-label">
-                                {m.sender_type === "user" ? "You" : m.sender_type === "system" ? "System" : "Work Well Yoga"}
+                                {m.sender_type === "user" ? "You" : m.sender_type === "system" ? "System" : "Nine2Rise"}
                               </div>
                               <div className="dash-msg-bubble-body">{m.body}</div>
                               {m.metadata?.pay ? (

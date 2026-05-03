@@ -1,5 +1,5 @@
 -- ==========================================================
--- Work Well Yoga — Account / Profile Setup
+-- Nine2Rise — Account / Profile Setup
 -- Run this in Supabase SQL Editor (all at once)
 -- ==========================================================
 

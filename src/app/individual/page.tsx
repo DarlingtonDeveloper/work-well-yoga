@@ -20,7 +20,7 @@ export default function IndividualPage() {
       <section className="ind-hero">
         <div className="ind-hero-inner">
           <div className="eyebrow">For employees</div>
-          <p>Work Well Yoga is offered as a benefit \u2014 either directly by your employer, or through your private healthcare plan with Vitality, BUPA, AXA or Aetna. You get the full app, you attend the live classes your team books, and nobody at work sees what you practise or when.</p>
+          <p>Nine2Rise is offered as a benefit \u2014 either directly by your employer, or through your private healthcare plan with Vitality, BUPA, AXA or Aetna. You get the full app, you attend the live classes your team books, and nobody at work sees what you practise or when.</p>
           <div className="ind-hero-ctas">
             <Link href="/download" className="btn btn-sun btn-lg">Get the app <Icon name="arrow-right" size={14} /></Link>
             <Link href="/pricing" className="btn btn-ghost btn-lg">See plans &rarr;</Link>

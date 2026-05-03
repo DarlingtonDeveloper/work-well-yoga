@@ -301,7 +301,7 @@ export function AccountShell({ user, profile: initialProfile, subscriptions: ini
               <button className="acct-btn acct-btn-outline" onClick={handleSignOut}>
                 Sign out <Icon name="arrow-right" size={12} />
               </button>
-              <a href="mailto:hello@workwellyoga.com?subject=Delete my account" className="acct-btn acct-btn-danger">
+              <a href="mailto:hello@nine2rise.com?subject=Delete my account" className="acct-btn acct-btn-danger">
                 Request account deletion
               </a>
             </div>

@@ -1,5 +1,5 @@
 -- ============================================================
--- Work Well Yoga — Courses: modules, lessons, resources & progress
+-- Nine2Rise — Courses: modules, lessons, resources & progress
 -- Run this in your Supabase SQL Editor
 -- ============================================================
 

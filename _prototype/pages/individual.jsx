@@ -20,7 +20,7 @@ function IndividualPage({ setPage }) {
       <section className="ind-hero">
         <div className="ind-hero-inner">
           <div className="eyebrow">For employees</div>
-          <p>Work Well Yoga is offered as a benefit — either directly by your employer, or through your private healthcare plan with Vitality, BUPA, AXA or Aetna. You get the full app, you attend the live classes your team books, and nobody at work sees what you practise or when.</p>
+          <p>Nine2Rise is offered as a benefit — either directly by your employer, or through your private healthcare plan with Vitality, BUPA, AXA or Aetna. You get the full app, you attend the live classes your team books, and nobody at work sees what you practise or when.</p>
           <div className="ind-hero-ctas">
             <button className="btn btn-sun btn-lg" onClick={() => setPage("app")}>Get the app <Icon name="arrow-right" size={14}/></button>
             <button className="btn btn-ghost btn-lg" onClick={() => setPage("pricing")}>See plans →</button>

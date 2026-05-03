@@ -85,7 +85,7 @@ function CorporatePage({ setPage }) {
           <div className="eyebrow">For employers</div>
           <h1>Fewer sick days.<br/>Less <em>burnout.</em><br/>Happier teams.</h1>
           <p className="corp-hero-sub">
-            Stress‑related absence costs UK businesses an estimated £28bn a year. Work Well Yoga is a wellness partner that brings movement, breathwork, meditation and recovery practices into your office or co‑working space — plus an app your team actually opens — so people recover faster, stay longer, and show up better.
+            Stress‑related absence costs UK businesses an estimated £28bn a year. Nine2Rise is a wellness partner that brings movement, breathwork, meditation and recovery practices into your office or co‑working space — plus an app your team actually opens — so people recover faster, stay longer, and show up better.
           </p>
           <div className="corp-hero-ctas">
             <button className="btn btn-sun btn-lg" onClick={() => setPage("contact")}>Book a 20‑min intro <Icon name="arrow-right" size={14}/></button>
@@ -214,7 +214,7 @@ function CorporatePage({ setPage }) {
           <div>
             <div className="section-eyebrow" style={{color: 'var(--teal)'}}>Members only</div>
             <h3>Just a single event? That works too.</h3>
-            <p>Already a Work Well Yoga member? Book a one‑off for your team offsite, quarterly all‑hands, or Mental Health Awareness Week. One‑off classes start at <strong>£280</strong>.</p>
+            <p>Already a Nine2Rise member? Book a one‑off for your team offsite, quarterly all‑hands, or Mental Health Awareness Week. One‑off classes start at <strong>£280</strong>.</p>
           </div>
           <button className="btn btn-sun btn-lg" onClick={() => setPage("contact")}>Get a quote <Icon name="arrow-right" size={14}/></button>
         </div>
@@ -257,7 +257,7 @@ function CorporatePage({ setPage }) {
           <div>
             <div className="section-eyebrow" style={{color: 'var(--sun)'}}>Two ways in</div>
             <h2 className="section-h2">Through your company, or <em>your healthcare plan.</em></h2>
-            <p>There are two ways employees access Work Well Yoga. <strong>One:</strong> your company signs up directly — every employee gets included. <strong>Two:</strong> it's offered as a claimable wellness benefit through private healthcare partners like AXA, Vitality and BUPA — employees claim through their existing plan.</p>
+            <p>There are two ways employees access Nine2Rise. <strong>One:</strong> your company signs up directly — every employee gets included. <strong>Two:</strong> it's offered as a claimable wellness benefit through private healthcare partners like AXA, Vitality and BUPA — employees claim through their existing plan.</p>
             <button className="btn btn-sun" onClick={() => setPage("contact")}>Check eligibility <Icon name="arrow-right" size={14}/></button>
           </div>
           <div className="insurance-logos">

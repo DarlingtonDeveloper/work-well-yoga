@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     .insert({
       category: body.category,
       kind: body.kind,
-      brand: body.brand || "Work Well Yoga",
+      brand: body.brand || "Nine2Rise",
       name: body.name,
       price: body.price,
       meta: body.meta || null,
