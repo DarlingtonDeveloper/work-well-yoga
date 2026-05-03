@@ -1,14 +1,11 @@
 "use client";
 
-import { Nav } from "./nav";
-import { MiniFoot } from "./footer";
 import Link from "next/link";
 import { Icon } from "./icons";
 
 export function BookingsShell() {
   return (
     <>
-      <Nav />
       <section className="dash-main">
         <div className="dash-inner">
           <h1 className="dash-h1">Bookings</h1>
@@ -31,7 +28,6 @@ export function BookingsShell() {
           </div>
         </div>
       </section>
-      <MiniFoot />
     </>
   );
 }

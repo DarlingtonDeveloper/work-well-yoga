@@ -3,8 +3,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Nav } from "@/components/nav";
-import { FloatingContact, MiniFoot } from "@/components/footer";
 import { Icon } from "@/components/icons";
 
 export interface ProductImage {
@@ -1023,7 +1021,6 @@ export function ShopClient({ products, ownedCourseIds = [] }: { products: Produc
 
   return (
     <>
-      <Nav />
       <section className="shop-hero shop-hero-bold">
         <div className="shop-hero-inner">
           <h1 className="shop-hero-h1">{head.title}</h1>
@@ -1325,8 +1322,6 @@ export function ShopClient({ products, ownedCourseIds = [] }: { products: Produc
         );
       })()}
 
-      <MiniFoot />
-      <FloatingContact />
     </>
   );
 }
