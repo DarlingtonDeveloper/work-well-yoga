@@ -9,7 +9,7 @@ function ContactPage({ setPage }) {
   });
 
   const reasons = [
-    { id: "employer", label: "I want Work Well Yoga at my workplace", eye: "Employer enquiry" },
+    { id: "employer", label: "I want Nine2Rise at my workplace", eye: "Employer enquiry" },
     { id: "cowork", label: "I run a co‑working space", eye: "Co‑working partnership" },
     { id: "teacher", label: "I'd like to teach with you", eye: "Teacher application" },
     { id: "press", label: "Press, podcast or partnership", eye: "Press & collaborations" },
@@ -80,7 +80,7 @@ function ContactPage({ setPage }) {
             </div>
           </div>
 
-          <form className="contact-form" onSubmit={e => { e.preventDefault(); alert("In the real build this submits — for now, email hello@workwellyoga.com"); }}>
+          <form className="contact-form" onSubmit={e => { e.preventDefault(); alert("In the real build this submits — for now, email hello@nine2rise.com"); }}>
             <div className="cf-head">
               <div className="cf-eye">{active.eye}</div>
               <h2>Tell us a little.</h2>
@@ -128,15 +128,15 @@ function ContactPage({ setPage }) {
             </div>
             <div className="side-row">
               <div className="side-k">Email</div>
-              <div className="side-v"><a href="mailto:hello@workwellyoga.com">hello@workwellyoga.com</a></div>
+              <div className="side-v"><a href="mailto:hello@nine2rise.com">hello@nine2rise.com</a></div>
             </div>
             <div className="side-row">
               <div className="side-k">Teachers</div>
-              <div className="side-v"><a href="mailto:teachers@workwellyoga.com">teachers@workwellyoga.com</a></div>
+              <div className="side-v"><a href="mailto:teachers@nine2rise.com">teachers@nine2rise.com</a></div>
             </div>
             <div className="side-row">
               <div className="side-k">Press</div>
-              <div className="side-v"><a href="mailto:press@workwellyoga.com">press@workwellyoga.com</a></div>
+              <div className="side-v"><a href="mailto:press@nine2rise.com">press@nine2rise.com</a></div>
             </div>
           </div>
 
@@ -145,7 +145,7 @@ function ContactPage({ setPage }) {
             <a className="side-social" href="#" onClick={e => e.preventDefault()}>
               <span className="ss-icon ss-ig"><Icon name="heart" size={16}/></span>
               <div>
-                <div className="ss-name">@workwell.yoga</div>
+                <div className="ss-name">@nine2rise</div>
                 <div className="ss-meta">Instagram · weekly micro‑classes</div>
               </div>
               <Icon name="arrow-right" size={14}/>
@@ -153,7 +153,7 @@ function ContactPage({ setPage }) {
             <a className="side-social" href="#" onClick={e => e.preventDefault()}>
               <span className="ss-icon ss-li"><Icon name="check" size={16}/></span>
               <div>
-                <div className="ss-name">Work Well Yoga on LinkedIn</div>
+                <div className="ss-name">Nine2Rise on LinkedIn</div>
                 <div className="ss-meta">HR conversations · hiring</div>
               </div>
               <Icon name="arrow-right" size={14}/>
@@ -174,7 +174,7 @@ function ContactPage({ setPage }) {
       <section className="teach-wrap teach-wrap-simple" id="teach">
         <div className="teach-simple">
           <div className="eyebrow">Teach with us</div>
-          <h2 className="section-h2">Looking to teach <em>with Work Well Yoga?</em></h2>
+          <h2 className="section-h2">Looking to teach <em>with Nine2Rise?</em></h2>
           <p className="teach-lede">
             We'd love to hear from qualified yoga teachers, breathwork guides and meditation practitioners. Drop us a line and tell us about yourself.
           </p>

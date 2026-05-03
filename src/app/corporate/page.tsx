@@ -88,7 +88,7 @@ export default function CorporatePage() {
           <div className="eyebrow">For companies</div>
           <h1>Fewer sick days.<br />Less burnout.<br />Happier teams.</h1>
           <p className="corp-hero-sub">
-            Work Well Yoga brings a dedicated yoga teacher to your office \u2014 or your Zoom \u2014 every week.
+            Nine2Rise brings a dedicated yoga teacher to your office \u2014 or your Zoom \u2014 every week.
             No studio memberships. No scheduling faff. Just a class your team actually looks forward to.
           </p>
           <div className="corp-hero-ctas">
@@ -300,7 +300,7 @@ export default function CorporatePage() {
           <div className="section-eyebrow">Healthcare</div>
           <h2>Through your company, or your healthcare plan.</h2>
           <p>
-            Work Well Yoga is recognised by Vitality, BUPA, AXA Health, and Aetna as an eligible
+            Nine2Rise is recognised by Vitality, BUPA, AXA Health, and Aetna as an eligible
             wellbeing benefit. Most Quarterly and Full team plans are covered in full under corporate
             healthcare policies. We&apos;ll send your HR team everything they need to claim.
           </p>

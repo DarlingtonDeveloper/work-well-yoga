@@ -122,7 +122,7 @@ async function handleSubscribe(planName: string, price: number) {
     body: JSON.stringify({
       mode: "subscription",
       planName,
-      items: [{ name: `Work Well Yoga — ${planName}`, price }],
+      items: [{ name: `Nine2Rise — ${planName}`, price }],
     }),
   });
   const { url } = await res.json();
@@ -261,12 +261,12 @@ export default function PricingPage() {
             <div className="section-eyebrow">Frequently asked questions</div>
             <h2 className="section-h2">Short answers. <em>No fine print.</em></h2>
           </div>
-          <p className="section-lede">The long version is in our terms. If yours isn&apos;t here, email <a href="mailto:hello@workwellyoga.com">hello@workwellyoga.com</a>.</p>
+          <p className="section-lede">The long version is in our terms. If yours isn&apos;t here, email <a href="mailto:hello@nine2rise.com">hello@nine2rise.com</a>.</p>
         </div>
         <div className="faq">
           <details open>
             <summary>Do employees pay anything directly?</summary>
-            <p>No. Work Well Yoga is a business&#x2011;to&#x2011;business subscription. Your employer, your insurer, or your co&#x2011;working space pays us &mdash; your employees get access at no personal cost.</p>
+            <p>No. Nine2Rise is a business&#x2011;to&#x2011;business subscription. Your employer, your insurer, or your co&#x2011;working space pays us &mdash; your employees get access at no personal cost.</p>
           </details>
           <details>
             <summary>What&apos;s the minimum contract length?</summary>
@@ -281,7 +281,7 @@ export default function PricingPage() {
             <p>Ideally yes &mdash; a quiet meeting room with the chairs stacked to the side. We bring 15 mats, blocks, straps and a Bluetooth speaker. If you&apos;re tight on space we can run shorter seated sessions at desks.</p>
           </details>
           <details>
-            <summary>Can employees claim Work Well Yoga through their health insurance?</summary>
+            <summary>Can employees claim Nine2Rise through their health insurance?</summary>
             <p>No &mdash; they can&apos;t claim it directly. Access is arranged through the employer or health insurer, not the individual. If you&apos;re covered, your insurance provider will let you know as part of your plan&apos;s benefits.</p>
           </details>
           <details>

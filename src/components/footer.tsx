@@ -16,13 +16,13 @@ export function FloatingContact() {
         </span>
       </a>
       <div className="divider" />
-      <a className="f-item" href="mailto:hello@workwellyoga.com">
+      <a className="f-item" href="mailto:hello@nine2rise.com">
         <span className="f-ico sun">
           <Icon name="mail" size={14} />
         </span>
         <span>
           <span className="f-label">Write</span>
-          <span className="f-value">hello@workwellyoga.com</span>
+          <span className="f-value">hello@nine2rise.com</span>
         </span>
       </a>
     </div>
@@ -34,7 +34,7 @@ export function MiniFoot() {
     <div className="mini-foot">
       <div className="f-logo">
         <div className="logo-mark" style={{ width: 22, height: 22 }} />
-        <span>Work Well Yoga</span>
+        <span>Nine2Rise</span>
       </div>
       <div className="f-links">
         <Link href="/pricing">Pricing</Link>
@@ -46,7 +46,7 @@ export function MiniFoot() {
         <Link href="/individual">For employees</Link>
       </div>
       <div style={{ fontSize: 12 }}>
-        &copy; 2026 Work Well Yoga &middot; Made with care in London
+        &copy; 2026 Nine2Rise &middot; Made with care in London
       </div>
     </div>
   );

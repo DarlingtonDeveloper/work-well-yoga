@@ -66,7 +66,7 @@ function PartnersPage({ setPage }) {
       <section className="partners-hero">
         <div className="partners-hero-inner">
           <div className="partners-hero-copy">
-            <div className="eyebrow">Teach with Work Well Yoga</div>
+            <div className="eyebrow">Teach with Nine2Rise</div>
             <h1>Pay that <em>respects</em><br/>your training.</h1>
             <p className="lede">We pay teachers £60–95 per sixty‑minute class, travel on top. We schedule three weeks in advance. We cancel with 48 hours' notice or full pay. This page is about how, and who we look for.</p>
 
@@ -117,7 +117,7 @@ function PartnersPage({ setPage }) {
               </div>
             </div>
             <div className="ph-card ph-card-2">
-              <div className="ph-q">"I've taught in offices for four years. Work Well Yoga was the first agency that paid my invoice the same week I sent it."</div>
+              <div className="ph-q">"I've taught in offices for four years. Nine2Rise was the first agency that paid my invoice the same week I sent it."</div>
               <div className="ph-attrib">— Amara, teacher since Jan 2024</div>
             </div>
           </div>
@@ -262,7 +262,7 @@ function PartnersPage({ setPage }) {
             <div className="section-eyebrow">Small questions</div>
             <h2 className="section-h2">Before you apply.</h2>
           </div>
-          <p className="section-lede">We get asked these most often. Email <a href="mailto:teachers@workwellyoga.com">teachers@workwellyoga.com</a> for anything else.</p>
+          <p className="section-lede">We get asked these most often. Email <a href="mailto:teachers@nine2rise.com">teachers@nine2rise.com</a> for anything else.</p>
         </div>
         <div className="faq">
           <details open>
@@ -297,7 +297,7 @@ function PartnersPage({ setPage }) {
             <p>Two minutes of you teaching. Not polished, not lit. Just you speaking to a class, the way you actually do.</p>
             <div className="store-row">
               <button className="btn btn-sun btn-lg" onClick={() => setPage("contact")}>Start your application <Icon name="arrow-right" size={14}/></button>
-              <a className="btn btn-ghost btn-lg" style={{borderColor: 'rgba(255,255,255,0.3)', color: '#fff'}} href="mailto:teachers@workwellyoga.com">teachers@workwellyoga.com</a>
+              <a className="btn btn-ghost btn-lg" style={{borderColor: 'rgba(255,255,255,0.3)', color: '#fff'}} href="mailto:teachers@nine2rise.com">teachers@nine2rise.com</a>
             </div>
           </div>
         </div>

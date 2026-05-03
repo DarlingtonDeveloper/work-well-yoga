@@ -42,7 +42,7 @@ export function Nav() {
       <div className="nav-inner">
         <Link href="/" className="logo">
           <div className="logo-mark" />
-          <span>Work Well Yoga</span>
+          <span>Nine2Rise</span>
         </Link>
         <div className="nav-links">
           {items.map((it) => (

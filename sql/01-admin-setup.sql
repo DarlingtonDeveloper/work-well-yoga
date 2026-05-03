@@ -1,5 +1,5 @@
 -- ==========================================================
--- Work Well Yoga — Admin Setup
+-- Nine2Rise — Admin Setup
 -- Run this in Supabase SQL Editor (all at once)
 -- ==========================================================
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS products (
   id SERIAL PRIMARY KEY,
   category TEXT NOT NULL,
   kind TEXT NOT NULL,
-  brand TEXT NOT NULL DEFAULT 'Work Well Yoga',
+  brand TEXT NOT NULL DEFAULT 'Nine2Rise',
   name TEXT NOT NULL,
   price TEXT NOT NULL,
   meta TEXT,

@@ -1,5 +1,5 @@
 -- ============================================================
--- Work Well Yoga — Practice: session logging, streaks & favourites
+-- Nine2Rise — Practice: session logging, streaks & favourites
 -- Run this in your Supabase SQL Editor
 -- ============================================================
 

@@ -1,5 +1,5 @@
 -- ==========================================================
--- Work Well Yoga — Bookings & Mailing Setup
+-- Nine2Rise — Bookings & Mailing Setup
 -- Run this in Supabase SQL Editor (all at once)
 -- ==========================================================
 
@@ -119,8 +119,8 @@ CREATE TABLE IF NOT EXISTS email_campaigns (
   event_id INTEGER REFERENCES events(id) ON DELETE SET NULL,
   subject TEXT NOT NULL,
   body TEXT NOT NULL,
-  from_name TEXT DEFAULT 'Work Well Yoga',
-  from_email TEXT DEFAULT 'hello@workwellyoga.com',
+  from_name TEXT DEFAULT 'Nine2Rise',
+  from_email TEXT DEFAULT 'hello@nine2rise.com',
   status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'sending', 'sent', 'failed')),
   recipient_count INTEGER DEFAULT 0,
   sent_at TIMESTAMPTZ,
@@ -164,15 +164,15 @@ ON CONFLICT DO NOTHING;
 -- ---------------------------------------------------------
 INSERT INTO email_templates (slug, name, subject, body) VALUES
   ('booking-confirmed', 'Booking Confirmed', 'Your booking is confirmed — {{event_title}}',
-   '<h2>You''re in, {{name}}.</h2><p>Your spot for <strong>{{event_title}}</strong> is confirmed.</p><p><strong>When:</strong> {{event_date}}<br/><strong>Where:</strong> {{event_location}}</p><p>We''ll send a reminder closer to the date.</p><p>See you there,<br/>Work Well Yoga</p>'),
+   '<h2>You''re in, {{name}}.</h2><p>Your spot for <strong>{{event_title}}</strong> is confirmed.</p><p><strong>When:</strong> {{event_date}}<br/><strong>Where:</strong> {{event_location}}</p><p>We''ll send a reminder closer to the date.</p><p>See you there,<br/>Nine2Rise</p>'),
   ('waitlist-joined', 'Waitlist Confirmation', 'You''re on the waitlist — {{event_title}}',
-   '<h2>You''re on the list, {{name}}.</h2><p>You''re #{{position}} on the waitlist for <strong>{{event_title}}</strong>.</p><p>We''ll let you know the moment a spot opens up.</p><p>Work Well Yoga</p>'),
+   '<h2>You''re on the list, {{name}}.</h2><p>You''re #{{position}} on the waitlist for <strong>{{event_title}}</strong>.</p><p>We''ll let you know the moment a spot opens up.</p><p>Nine2Rise</p>'),
   ('waitlist-promoted', 'A spot opened up!', 'A spot opened up — {{event_title}}',
-   '<h2>Good news, {{name}}.</h2><p>A spot has opened up for <strong>{{event_title}}</strong> and it''s yours.</p><p><strong>When:</strong> {{event_date}}<br/><strong>Where:</strong> {{event_location}}</p><p>See you there,<br/>Work Well Yoga</p>'),
+   '<h2>Good news, {{name}}.</h2><p>A spot has opened up for <strong>{{event_title}}</strong> and it''s yours.</p><p><strong>When:</strong> {{event_date}}<br/><strong>Where:</strong> {{event_location}}</p><p>See you there,<br/>Nine2Rise</p>'),
   ('booking-cancelled', 'Booking Cancelled', 'Your booking has been cancelled — {{event_title}}',
-   '<h2>Booking cancelled</h2><p>Hi {{name}}, your booking for <strong>{{event_title}}</strong> has been cancelled.</p><p>If you think this is a mistake, please reply to this email.</p><p>Work Well Yoga</p>'),
+   '<h2>Booking cancelled</h2><p>Hi {{name}}, your booking for <strong>{{event_title}}</strong> has been cancelled.</p><p>If you think this is a mistake, please reply to this email.</p><p>Nine2Rise</p>'),
   ('event-reminder', 'Event Reminder', 'Reminder: {{event_title}} is coming up',
-   '<h2>See you soon, {{name}}.</h2><p><strong>{{event_title}}</strong> is happening tomorrow.</p><p><strong>When:</strong> {{event_date}}<br/><strong>Where:</strong> {{event_location}}</p><p>Work Well Yoga</p>')
+   '<h2>See you soon, {{name}}.</h2><p><strong>{{event_title}}</strong> is happening tomorrow.</p><p><strong>When:</strong> {{event_date}}<br/><strong>Where:</strong> {{event_location}}</p><p>Nine2Rise</p>')
 ON CONFLICT (slug) DO NOTHING;
 
 -- 10. Indexes for performance

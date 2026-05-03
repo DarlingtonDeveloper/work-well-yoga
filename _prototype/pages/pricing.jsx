@@ -115,14 +115,14 @@ function PricingPage({ setPage }) {
       name: "Vitality",
       tagline: "Tier 1 partner",
       badge: "Most members covered",
-      blurb: "Work Well Yoga is a claimable wellness benefit. Members earn points for every class attended, with six months of app access fully reimbursable.",
+      blurb: "Nine2Rise is a claimable wellness benefit. Members earn points for every class attended, with six months of app access fully reimbursable.",
       covered: ["6 months app access", "Unlimited live class bookings", "Vitality points per class"],
       notcovered: ["1:1 teacher sessions", "Workshop attendance"],
     },
     {
       name: "BUPA",
       tagline: "Tier 1 partner",
-      blurb: "BUPA members with a corporate plan can claim Work Well Yoga as a preventive wellbeing benefit. Check your wellbeing benefits section.",
+      blurb: "BUPA members with a corporate plan can claim Nine2Rise as a preventive wellbeing benefit. Check your wellbeing benefits section.",
       covered: ["3 months app access", "Booking into partner co‑working classes"],
       notcovered: ["In‑office classes (unless employer covers)"],
     },
@@ -277,12 +277,12 @@ function PricingPage({ setPage }) {
             <div className="section-eyebrow">Frequently asked questions</div>
             <h2 className="section-h2">Short answers. <em>No fine print.</em></h2>
           </div>
-          <p className="section-lede">The long version is in our terms. If yours isn't here, email <a href="mailto:hello@workwellyoga.com">hello@workwellyoga.com</a>.</p>
+          <p className="section-lede">The long version is in our terms. If yours isn't here, email <a href="mailto:hello@nine2rise.com">hello@nine2rise.com</a>.</p>
         </div>
         <div className="faq">
           <details open>
             <summary>Do employees pay anything directly?</summary>
-            <p>No. Work Well Yoga is a business‑to‑business subscription. Your employer, your insurer, or your co‑working space pays us — your employees get access at no personal cost.</p>
+            <p>No. Nine2Rise is a business‑to‑business subscription. Your employer, your insurer, or your co‑working space pays us — your employees get access at no personal cost.</p>
           </details>
           <details>
             <summary>What's the minimum contract length?</summary>
@@ -297,7 +297,7 @@ function PricingPage({ setPage }) {
             <p>Ideally yes — a quiet meeting room with the chairs stacked to the side. We bring 15 mats, blocks, straps and a Bluetooth speaker. If you're tight on space we can run shorter seated sessions at desks.</p>
           </details>
           <details>
-            <summary>Can employees claim Work Well Yoga through their health insurance?</summary>
+            <summary>Can employees claim Nine2Rise through their health insurance?</summary>
             <p>No — they can't claim it directly. Access is arranged through the employer or health insurer, not the individual. If you're covered, your insurance provider will let you know as part of your plan's benefits.</p>
           </details>
           <details>

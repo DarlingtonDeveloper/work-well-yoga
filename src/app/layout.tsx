@@ -19,7 +19,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Work Well Yoga — yoga for the whole of you",
+  title: "Nine2Rise — yoga for the whole of you",
   description:
     "A yoga practice that meets you in the middle of your Tuesday — not at a retreat you'll never book.",
 };

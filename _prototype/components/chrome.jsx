@@ -13,7 +13,7 @@ function Nav({ page, setPage }) {
       <div className="nav-inner">
         <div className="logo" onClick={() => setPage("home")}>
           <div className="logo-mark" />
-          <span>Work Well Yoga</span>
+          <span>Nine2Rise</span>
         </div>
         <div className="nav-links">
           {items.map(it => (
@@ -47,11 +47,11 @@ function FloatingContact() {
         </span>
       </a>
       <div className="divider" />
-      <a className="f-item" href="mailto:hello@workwellyoga.com">
+      <a className="f-item" href="mailto:hello@nine2rise.com">
         <span className="f-ico sun"><Icon name="mail" size={14} /></span>
         <span>
           <span className="f-label">Write</span>
-          <span className="f-value">hello@workwellyoga.com</span>
+          <span className="f-value">hello@nine2rise.com</span>
         </span>
       </a>
     </div>
@@ -63,7 +63,7 @@ function MiniFoot() {
     <div className="mini-foot">
       <div className="f-logo">
         <div className="logo-mark" style={{ width: 22, height: 22 }} />
-        <span>Work Well Yoga</span>
+        <span>Nine2Rise</span>
       </div>
       <div className="f-links">
         <a onClick={() => window.dispatchEvent(new CustomEvent('wwy-goto', {detail: 'pricing'}))} style={{cursor:'pointer'}}>Pricing</a>
@@ -74,7 +74,7 @@ function MiniFoot() {
         <a>Press</a>
         <a>Instagram</a>
       </div>
-      <div style={{ fontSize: 12 }}>© 2026 Work Well Yoga · Made with care in London</div>
+      <div style={{ fontSize: 12 }}>© 2026 Nine2Rise · Made with care in London</div>
     </div>
   );
 }

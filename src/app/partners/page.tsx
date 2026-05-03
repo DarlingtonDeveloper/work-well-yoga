@@ -469,7 +469,7 @@ export default function PartnersPage() {
                 Apply now <Icon name="arrow-right" size={14} />
               </Link>
               <a
-                href="mailto:teachers@workwellyoga.com"
+                href="mailto:teachers@nine2rise.com"
                 className="btn btn-ghost btn-lg"
                 style={{ borderColor: "rgba(255,255,255,0.3)", color: "#fff" }}
               >

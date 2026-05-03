@@ -679,7 +679,7 @@ export function AdminOrders() {
 const EMPTY_PRODUCT = {
   category: "course",
   kind: "",
-  brand: "Work Well Yoga",
+  brand: "Nine2Rise",
   name: "",
   price: "",
   meta: "",
@@ -2055,7 +2055,7 @@ export function AdminCampaigns() {
   const [templates, setTemplates] = useState<EmailTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<number | "new" | null>(null);
-  const [form, setForm] = useState({ list_id: 0, event_id: 0, subject: "", body: "", from_name: "Work Well Yoga", from_email: "hello@workwellyoga.com" });
+  const [form, setForm] = useState({ list_id: 0, event_id: 0, subject: "", body: "", from_name: "Nine2Rise", from_email: "hello@nine2rise.com" });
   const [saving, setSaving] = useState(false);
   const [preview, setPreview] = useState<number | null>(null);
   const [tab, setTab] = useState<"campaigns" | "templates">("campaigns");
@@ -2078,7 +2078,7 @@ export function AdminCampaigns() {
   useEffect(() => { load(); }, [load]);
 
   const startNew = () => {
-    setForm({ list_id: lists[0]?.id || 0, event_id: 0, subject: "", body: "", from_name: "Work Well Yoga", from_email: "hello@workwellyoga.com" });
+    setForm({ list_id: lists[0]?.id || 0, event_id: 0, subject: "", body: "", from_name: "Nine2Rise", from_email: "hello@nine2rise.com" });
     setEditing("new");
   };
 

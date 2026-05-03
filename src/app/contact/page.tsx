@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Icon } from "@/components/icons";
 
 const reasons = [
-  { id: "employer", label: "I want Work Well Yoga at my workplace", eye: "Employer enquiry" },
+  { id: "employer", label: "I want Nine2Rise at my workplace", eye: "Employer enquiry" },
   { id: "cowork", label: "I run a co\u2011working space", eye: "Co\u2011working partnership" },
   { id: "teacher", label: "I\u2019d like to teach with you", eye: "Teacher application" },
   { id: "press", label: "Press, podcast or partnership", eye: "Press & collaborations" },
@@ -185,15 +185,15 @@ export default function ContactPage() {
             </div>
             <div className="side-row">
               <div className="side-k">Email</div>
-              <div className="side-v"><a href="mailto:hello@workwellyoga.com">hello@workwellyoga.com</a></div>
+              <div className="side-v"><a href="mailto:hello@nine2rise.com">hello@nine2rise.com</a></div>
             </div>
             <div className="side-row">
               <div className="side-k">Teachers</div>
-              <div className="side-v"><a href="mailto:teachers@workwellyoga.com">teachers@workwellyoga.com</a></div>
+              <div className="side-v"><a href="mailto:teachers@nine2rise.com">teachers@nine2rise.com</a></div>
             </div>
             <div className="side-row">
               <div className="side-k">Press</div>
-              <div className="side-v"><a href="mailto:press@workwellyoga.com">press@workwellyoga.com</a></div>
+              <div className="side-v"><a href="mailto:press@nine2rise.com">press@nine2rise.com</a></div>
             </div>
           </div>
 
@@ -202,7 +202,7 @@ export default function ContactPage() {
             <a className="side-social" href="#" onClick={(e) => e.preventDefault()}>
               <span className="ss-icon ss-ig"><Icon name="heart" size={16} /></span>
               <div>
-                <div className="ss-name">@workwell.yoga</div>
+                <div className="ss-name">@nine2rise</div>
                 <div className="ss-meta">Instagram &middot; weekly micro&#x2011;classes</div>
               </div>
               <Icon name="arrow-right" size={14} />
@@ -210,7 +210,7 @@ export default function ContactPage() {
             <a className="side-social" href="#" onClick={(e) => e.preventDefault()}>
               <span className="ss-icon ss-li"><Icon name="check" size={16} /></span>
               <div>
-                <div className="ss-name">Work Well Yoga on LinkedIn</div>
+                <div className="ss-name">Nine2Rise on LinkedIn</div>
                 <div className="ss-meta">HR conversations &middot; hiring</div>
               </div>
               <Icon name="arrow-right" size={14} />
@@ -231,7 +231,7 @@ export default function ContactPage() {
       <section className="teach-wrap teach-wrap-simple" id="teach">
         <div className="teach-simple">
           <div className="eyebrow">Teach with us</div>
-          <h2 className="section-h2">Looking to teach <em>with Work Well Yoga?</em></h2>
+          <h2 className="section-h2">Looking to teach <em>with Nine2Rise?</em></h2>
           <p className="teach-lede">
             We&apos;d love to hear from qualified yoga teachers, breathwork guides and meditation practitioners. Drop us a line and tell us about yourself.
           </p>

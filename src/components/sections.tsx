@@ -14,7 +14,7 @@ export function SplitSection() {
           </h2>
         </div>
         <p className="section-lede">
-          Work Well Yoga lives in the space between the cubicle and the cushion. Come as a person.
+          Nine2Rise lives in the space between the cubicle and the cushion. Come as a person.
           Bring your team later if you want.
         </p>
       </div>
